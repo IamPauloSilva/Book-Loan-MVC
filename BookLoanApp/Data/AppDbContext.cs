@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BookLoanApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookLoanApp.Data
 {
@@ -8,6 +9,6 @@ namespace BookLoanApp.Data
         {
             
         }
-
+        public DbSet<BooksModel> Books { get; set; }
     }
 }

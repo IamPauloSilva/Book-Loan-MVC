@@ -1,4 +1,5 @@
 ﻿using BookLoanApp.Data;
+using BookLoanApp.Dto;
 using BookLoanApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,30 @@ namespace BookLoanApp.Services.BookService
     public class BookService : IBookInterface
     {
         private readonly AppDbContext _context;
-
-        public BookService(AppDbContext context)
+        private string _serverpath;
+        public BookService(AppDbContext context, IWebHostEnvironment system)
         {
             _context = context;
+            _serverpath = system.WebRootPath;
+        }
+
+        public bool CheckIfBookAlreadyExists(BookCreationDto bookCreationDto)
+        {
+            try
+            {
+                var bookDb = _context.Books.FirstOrDefault(book => book.ISBN == bookCreationDto.ISBN);
+
+                if (bookDb != null) 
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex) 
+            { 
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<List<BooksModel>> GetBooks()
@@ -21,6 +42,52 @@ namespace BookLoanApp.Services.BookService
                 return books; // Return the list of books
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<BooksModel> Register(BookCreationDto bookCreationDto, IFormFile foto)
+        {
+            try
+            {
+                var uniqueCode = Guid.NewGuid().ToString();
+                var pathName = foto.FileName.Replace(" ", "").ToLower() + uniqueCode + bookCreationDto.ISBN + ".png";
+
+                string imgPath = _serverpath + "\\Images\\";
+
+                if (!Directory.Exists(imgPath))
+                {
+                    Directory.CreateDirectory(imgPath);
+                }
+
+                using (var stream = System.IO.File.Create(imgPath + pathName)) 
+                { 
+                    foto.CopyToAsync(stream).Wait();
+                }
+
+                var book = new BooksModel
+                {
+                    Title = bookCreationDto.Title,
+                    Cape = pathName,
+                    Author = bookCreationDto.Author,
+                    Description = bookCreationDto.Description,
+                    StockAmount = bookCreationDto.StockAmount,
+                    PublicationYear = bookCreationDto.PublicationYear,
+                    ISBN = bookCreationDto.ISBN,
+                    Genre = bookCreationDto.Genre,
+
+                };
+
+                _context.Add(book);
+                await _context.SaveChangesAsync();
+
+                return book;
+
+
+
+            }
+            catch (Exception ex) 
             {
                 throw new Exception(ex.Message);
             }

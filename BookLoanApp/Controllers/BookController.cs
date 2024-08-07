@@ -35,21 +35,25 @@ namespace BookLoanApp.Controllers
                 {
                     if (!_bookInterface.CheckIfBookAlreadyExists(bookCreationDto))
                     {
+                        TempData["MensagemErro"] = "ISBN already exists!";
                         return View(bookCreationDto);
                     }
 
                     var book = await _bookInterface.Register(bookCreationDto, foto);
 
+                    TempData["MensagemSucesso"] = "Book sucessfuly registered!";
                     return RedirectToAction("Index");
 
                 }
                 else
                 {
+                    TempData["MensagemErro"] = "Fill all fields!";
                     return View(bookCreationDto);
                 }
             }
             else 
-            { 
+            {
+                TempData["MensagemErro"] = "Please add a cape!";
                 return View(bookCreationDto);
 
             }

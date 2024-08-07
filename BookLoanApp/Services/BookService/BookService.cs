@@ -1,4 +1,5 @@
-﻿using BookLoanApp.Data;
+﻿using AutoMapper;
+using BookLoanApp.Data;
 using BookLoanApp.Dto;
 using BookLoanApp.Models;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +10,13 @@ namespace BookLoanApp.Services.BookService
     {
         private readonly AppDbContext _context;
         private string _serverpath;
-        public BookService(AppDbContext context, IWebHostEnvironment system)
+        private readonly IMapper _mapper;
+
+        public BookService(AppDbContext context, IWebHostEnvironment system, IMapper mapper)
         {
             _context = context;
             _serverpath = system.WebRootPath;
+            _mapper = mapper;
         }
 
         public bool CheckIfBookAlreadyExists(BookCreationDto bookCreationDto)
@@ -66,18 +70,21 @@ namespace BookLoanApp.Services.BookService
                     foto.CopyToAsync(stream).Wait();
                 }
 
-                var book = new BooksModel
-                {
-                    Title = bookCreationDto.Title,
-                    Cape = pathName,
-                    Author = bookCreationDto.Author,
-                    Description = bookCreationDto.Description,
-                    StockAmount = bookCreationDto.StockAmount,
-                    PublicationYear = bookCreationDto.PublicationYear,
-                    ISBN = bookCreationDto.ISBN,
-                    Genre = bookCreationDto.Genre,
+                //var book = new BooksModel
+                //{
+                //    Title = bookCreationDto.Title,
+                //    Cape = pathName,
+                //    Author = bookCreationDto.Author,
+                //    Description = bookCreationDto.Description,
+                //    StockAmount = bookCreationDto.StockAmount,
+                //    PublicationYear = bookCreationDto.PublicationYear,
+                //    ISBN = bookCreationDto.ISBN,
+                //    Genre = bookCreationDto.Genre,
 
-                };
+                //};
+
+                var book = _mapper.Map<BooksModel>(bookCreationDto);
+                book.Cape = pathName;
 
                 _context.Add(book);
                 await _context.SaveChangesAsync();

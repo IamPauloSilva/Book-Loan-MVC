@@ -2,3 +2,21 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+$(document).ready(function () {
+
+    $('#books-table').DataTable({
+        "ordering": true,
+        "paging": true,
+        "searching": true,
+    });
+
+
+    setTimeout(function () {
+        $(".alert").fadeOut("slow", function () {
+            $(this).alert('close');
+        })
+
+    }, 4000);
+});
+

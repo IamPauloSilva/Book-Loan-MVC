@@ -23,7 +23,7 @@
         <a class="btn btn-success" asp-action="Register" asp-controller="Book"><i class="bi bi-plus-circle"></i> Register new book</a>
     </div>
 
-    <table class="table table-hover" id="registros">
+    <table class="table table-hover" id="books-table">
         <thead>
             <tr>
                 <th></th>
@@ -48,7 +48,7 @@
                             @if (livro.Cape != null)
                             {
                                 <td>
-                                    <img src="imagem/@livro.Cape" style="width:50px; height: 50px" />
+                                    <img src="images/@livro.Cape" style="width:50px; height: 50px" />
                                 </td>
                             }
                             else

@@ -1,0 +1,69 @@
+﻿@using BookLoanApp.Models
+@model BooksModel
+
+
+<div class="container mt-5">
+    <h2>Book Details - @Model.Title</h2>
+
+
+    <div class="text-center">
+        <img src="/Images/@Model.Cape" style="width:150px; height:200px" />
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label">Title:</label>
+        <input type="text" asp-for="Title" class="form-control shadow-none" disabled>
+
+    </div>
+    <div class="mb-1">
+        <label class="form-label">Author:</label>
+        <input type="text" asp-for="Author" class="form-control shadow-none" disabled>
+
+    </div>
+    <div class="mb-1">
+        <label class="form-label">Description:</label>
+        <textarea asp-for="Description" class="form-control shadow-none" disabled></textarea>
+
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label">Publication Year:</label>
+        <input type="text" asp-for="PublicationYear" class="form-control shadow-none" disabled>
+
+    </div>
+    <div class="mb-1">
+        <label class="form-label">Genre:</label>
+        <input type="text" asp-for="Genre" class="form-control shadow-none" disabled>
+
+    </div>
+
+
+    <div class="mb-1">
+        <label class="form-label">Stock Amount:</label>
+        <input type="number" asp-for="StockAmount" class="form-control shadow-none" min="1" disabled>
+
+    </div>
+    <div class="mb-1">
+        <label class="form-label">ISBN:</label>
+        <input type="text" id="isbn" asp-for="ISBN" class="form-control shadow-none" disabled>
+
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label">Register Date:</label>
+        <input type="text" id="isbn" asp-for="RegisterDate" class="form-control shadow-none" disabled>
+
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label">Last Alteration Date:</label>
+        <input type="text" id="isbn" asp-for="LastAlterationDate" class="form-control shadow-none" disabled>
+
+    </div>
+
+    <div class="btn-box d-flex mt-3">
+
+        <a type="submit" class="btn btn-info w-100" asp-controller="Book" asp-action="Index"><i class="bi bi-arrow-left-circle"></i> Back</a>
+    </div>
+
+</div>

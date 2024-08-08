@@ -9,6 +9,8 @@ namespace BookLoanApp.Profiles
         public ProfileAutoMapper() 
         {
             CreateMap<BookCreationDto, BooksModel>();
+            CreateMap<BooksModel, BookEditDto>();
+            CreateMap<BookEditDto, BooksModel>();
         }
     }
 }

@@ -43,7 +43,7 @@ namespace BookLoanApp.Services.BookService
             try
             {
                 var books = await _context.Books.ToListAsync();
-                return books; // Return the list of books
+                return books; 
             }
             catch (Exception ex)
             {
@@ -51,46 +51,34 @@ namespace BookLoanApp.Services.BookService
             }
         }
 
+        
         public async Task<BooksModel> Register(BookCreationDto bookCreationDto, IFormFile foto)
         {
             try
             {
-                var uniqueCode = Guid.NewGuid().ToString();
-                var pathName = foto.FileName.Replace(" ", "").ToLower() + uniqueCode + bookCreationDto.ISBN + ".png";
+                var codigoUnico = Guid.NewGuid().ToString();
+                var nomeCaminhoImagem = foto.FileName.Replace(" ", "").ToLower() + codigoUnico + bookCreationDto.ISBN + ".png";
 
-                string imgPath = _serverpath + "\\Images\\";
+                string caminhoParaSalvarImagens = _serverpath + "\\Images\\";
 
-                if (!Directory.Exists(imgPath))
+                if (!Directory.Exists(caminhoParaSalvarImagens))
                 {
-                    Directory.CreateDirectory(imgPath);
+                    Directory.CreateDirectory(caminhoParaSalvarImagens);
                 }
 
-                using (var stream = System.IO.File.Create(imgPath + pathName)) 
-                { 
+                using (var stream = System.IO.File.Create(caminhoParaSalvarImagens + nomeCaminhoImagem))
+                {
                     foto.CopyToAsync(stream).Wait();
                 }
 
-                //var book = new BooksModel
-                //{
-                //    Title = bookCreationDto.Title,
-                //    Cape = pathName,
-                //    Author = bookCreationDto.Author,
-                //    Description = bookCreationDto.Description,
-                //    StockAmount = bookCreationDto.StockAmount,
-                //    PublicationYear = bookCreationDto.PublicationYear,
-                //    ISBN = bookCreationDto.ISBN,
-                //    Genre = bookCreationDto.Genre,
+                var livro = _mapper.Map<BooksModel>(bookCreationDto);
+                livro.Cape = nomeCaminhoImagem;
 
-                //};
 
-                var book = _mapper.Map<BooksModel>(bookCreationDto);
-                book.Cape = pathName;
-
-                _context.Add(book);
+                _context.Add(livro);
                 await _context.SaveChangesAsync();
 
-                return book;
-
+                return livro;
 
 
             }
@@ -99,5 +87,55 @@ namespace BookLoanApp.Services.BookService
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<BooksModel> GetBooksById(int? id)
+        {
+            try
+            {
+                var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
+                return book;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<BooksModel> Edit(BookEditDto bookEditDto, IFormFile foto)
+        {
+            try
+            {
+                var codigoUnico = Guid.NewGuid().ToString();
+                var nomeCaminhoImagem = foto.FileName.Replace(" ", "").ToLower() + codigoUnico + bookEditDto.ISBN + ".png";
+
+                string caminhoParaSalvarImagens = _serverpath + "\\Images\\";
+
+                if (!Directory.Exists(caminhoParaSalvarImagens))
+                {
+                    Directory.CreateDirectory(caminhoParaSalvarImagens);
+                }
+
+                using (var stream = System.IO.File.Create(caminhoParaSalvarImagens + nomeCaminhoImagem))
+                {
+                    foto.CopyToAsync(stream).Wait();
+                }
+
+                var livro = _mapper.Map<BooksModel>(bookEditDto);
+
+                livro.Cape = nomeCaminhoImagem;
+                livro.LastAlterationDate = DateTime.Now;
+
+
+                _context.Update(livro);
+                await _context.SaveChangesAsync();
+
+                return livro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

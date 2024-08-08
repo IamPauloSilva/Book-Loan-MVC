@@ -10,5 +10,9 @@ namespace BookLoanApp.Services.BookService
         bool CheckIfBookAlreadyExists(BookCreationDto bookCreationDto);
 
         Task<BooksModel> Register(BookCreationDto bookCreationDto, IFormFile foto);
+
+        Task<BooksModel> GetBooksById(int? id);
+
+        Task<BooksModel> Edit(BookEditDto bookEditDto, IFormFile foto);
     }
 }

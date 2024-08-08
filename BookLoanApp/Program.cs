@@ -1,5 +1,6 @@
 using BookLoanApp.Data;
 using BookLoanApp.Services.BookService;
+using BookLoanApp.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<IBookInterface, BookService >();
-
+builder.Services.AddScoped<IUserInterface, UserService>();
 
 var app = builder.Build();
 

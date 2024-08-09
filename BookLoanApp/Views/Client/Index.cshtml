@@ -1,8 +1,6 @@
 ﻿@using BookLoanApp.Models
-@model IEnumerable<UserModel>
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model IEnumerable<UserModel> 
+
 @{
 }
 
@@ -24,8 +22,8 @@
 <div class="container mt-5">
 
     <div class="btn-box d-flex justify-content-between align-items-center mb-3">
-        <h2>Register Employees!</h2>
-        <a asp-controller="User" asp-action="Register"  class="btn-success btn"><i class="bi bi-plus-circle"></i> Register new employee</a>
+        <h2>Register Clients!</h2>
+        <a asp-controller="User" asp-action="Register" asp-route-id="0" class="btn-success btn"><i class="bi bi-plus-circle"></i> Register new client</a>
     </div>
 
     <table class="table table-hover" id="data-table">

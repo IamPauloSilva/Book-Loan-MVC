@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookLoanApp.Dto;
+using BookLoanApp.Dto.Book;
 using BookLoanApp.Models;
 
 namespace BookLoanApp.Profiles

@@ -1,4 +1,5 @@
 using BookLoanApp.Data;
+using BookLoanApp.Services.Authentication;
 using BookLoanApp.Services.BookService;
 using BookLoanApp.Services.UserService;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<IBookInterface, BookService >();
 builder.Services.AddScoped<IUserInterface, UserService>();
+builder.Services.AddScoped<IAuthenticationInterface, AuthenticationService>();
 
 var app = builder.Build();
 

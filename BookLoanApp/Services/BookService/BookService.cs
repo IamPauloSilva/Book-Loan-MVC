@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BookLoanApp.Data;
-using BookLoanApp.Dto;
+using BookLoanApp.Dto.Book;
 using BookLoanApp.Models;
 using Microsoft.EntityFrameworkCore;
 

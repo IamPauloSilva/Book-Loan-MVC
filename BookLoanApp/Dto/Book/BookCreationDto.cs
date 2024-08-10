@@ -1,15 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookLoanApp.Dto
+namespace BookLoanApp.Dto.Book
 {
-    public class BookEditDto
+    public class BookCreationDto
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "Please fill the name title!")]
         public string Title { get; set; } = string.Empty;
-        
-        public string? Cape { get; set; }
         [Required(ErrorMessage = "Please fill the  Description!")]
         public string Description { get; set; } = string.Empty;
 

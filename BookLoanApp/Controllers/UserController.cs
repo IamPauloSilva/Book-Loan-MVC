@@ -34,6 +34,8 @@ namespace BookLoanApp.Controllers
             if (id != null)
             { 
                 ViewBag.Role = ProfilesEnum.Client;
+                ViewBag.ID = id;
+
             }
             return View();
         }

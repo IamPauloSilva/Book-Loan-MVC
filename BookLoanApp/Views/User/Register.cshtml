@@ -138,9 +138,13 @@
             <button type="submit" class="btn btn-success w-50 mx-1"><i class="bi bi-plus-circle"></i>Register</button>
 
 
-            @if (ViewBag.Role == ProfilesEnum.Client)
+            @if (ViewBag.Role == ProfilesEnum.Client && ViewBag.Id == 0)
             {
                 <a class="btn btn-info w-50" asp-controller="Client" asp-action="Index" asp-route-id="0"><i class="bi bi-arrow-left-circle"></i>Back</a>
+            }
+            else if(ViewBag.Id != 0 && ViewBag.Role == ProfilesEnum.Client)
+            {
+                <a class="btn btn-info w-50" asp-controller="Home" asp-action="Login" asp-route-id="0"><i class="bi bi-arrow-left-circle"></i>Back</a>
             }
             else
             {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookLoanApp.Dto.Adress;
 using BookLoanApp.Dto.Book;
 using BookLoanApp.Models;
 
@@ -11,6 +12,8 @@ namespace BookLoanApp.Profiles
             CreateMap<BookCreationDto, BooksModel>();
             CreateMap<BooksModel, BookEditDto>();
             CreateMap<BookEditDto, BooksModel>();
+            CreateMap<AdressModel, AdressEditDto>();
+            CreateMap<AdressEditDto, AdressModel>();
         }
     }
 }

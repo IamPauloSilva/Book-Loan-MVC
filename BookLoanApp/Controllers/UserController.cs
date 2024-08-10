@@ -1,4 +1,6 @@
-﻿using BookLoanApp.Dto.User;
+﻿using AutoMapper;
+using BookLoanApp.Dto.Adress;
+using BookLoanApp.Dto.User;
 using BookLoanApp.Enums;
 using BookLoanApp.Models;
 using BookLoanApp.Services.UserService;
@@ -9,9 +11,12 @@ namespace BookLoanApp.Controllers
     public class UserController : Controller
     {
         private readonly IUserInterface _userInterface;
-        public UserController(IUserInterface userInterface)
+        private readonly IMapper _mapper;
+
+        public UserController(IUserInterface userInterface, IMapper mapper)
         {
             _userInterface = userInterface;
+            _mapper = mapper;
         }
         public async Task<ActionResult> Index(int? id)
         {
@@ -108,5 +113,63 @@ namespace BookLoanApp.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        public async Task<IActionResult> Edit(int? Id)
+        {
+            if (Id != null)
+            {
+                var user = await _userInterface.GetUserById(Id);
+
+                var userEdited = new UserEditDto
+                {
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    Profile = user.Profile,
+                    Turno = user.Turno,
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Adress = _mapper.Map<AdressEditDto>(user.Adress)
+                };
+
+                if (userEdited.Profile == ProfilesEnum.Client)
+                {
+                    ViewBag.Role = ProfilesEnum.Client;
+                }
+                else
+                {
+                    ViewBag.Role = ProfilesEnum.Admin;
+                }
+
+                return View(userEdited);
+            }
+            return RedirectToAction("Index");
+
+        }
+        [HttpPost]
+        public async Task<ActionResult> Edit(UserEditDto userEditDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userInterface.Edit(userEditDto);
+                TempData["MensagemSucesso"] = "Sucessfully Edited";
+
+                if (user.Profile != ProfilesEnum.Client)
+                {
+                    return RedirectToAction("Index", "Employee");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Client",new {Id="0"});
+                }
+            }
+            else
+            {
+                TempData["MensagemErro"] = "Check provided data";
+                return View(userEditDto);
+            }
+        }
+
     }
+
+    
 }

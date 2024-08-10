@@ -1,4 +1,6 @@
-﻿using BookLoanApp.Data;
+﻿using AutoMapper;
+using BookLoanApp.Data;
+using BookLoanApp.Dto.Adress;
 using BookLoanApp.Dto.User;
 using BookLoanApp.Models;
 using BookLoanApp.Services.Authentication;
@@ -11,11 +13,13 @@ namespace BookLoanApp.Services.UserService
     {
         private readonly AppDbContext _dbContext;
         private readonly IAuthenticationInterface _authenticationInterface;
+        private readonly IMapper _mapper;
 
-        public UserService(AppDbContext dbContext,IAuthenticationInterface authenticationInterface)
+        public UserService(AppDbContext dbContext,IAuthenticationInterface authenticationInterface, IMapper mapper)
         {
             _dbContext = dbContext;
             _authenticationInterface = authenticationInterface;
+            _mapper = mapper;
         }
 
         public async Task<UserModel> ChangeUserSituation(int? id)
@@ -70,6 +74,35 @@ namespace BookLoanApp.Services.UserService
             {
                 throw new Exception(ex.Message);
 
+            }
+        }
+
+        public async Task<UserModel> Edit(UserEditDto userEditDto)
+        {
+            try
+            {
+                var userDB = await _dbContext.Users.Include(e => e.Adress).FirstOrDefaultAsync(u => u.Id == userEditDto.Id);
+                if (userDB != null)
+                {
+                    userDB.Turno = userEditDto.Turno;
+                    userDB.Profile = userEditDto.Profile;
+                    userDB.FullName = userEditDto.FullName;
+                    userDB.UserName = userEditDto.UserName;
+                    userDB.Email = userEditDto.Email;
+                    userDB.LastAlterationDate = DateTime.Now;
+                    userDB.Adress = _mapper.Map<AdressModel>(userEditDto.Adress);
+
+                    _dbContext.Update(userDB);
+                    await _dbContext.SaveChangesAsync();
+
+                    return userDB;
+                }
+                return userDB;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 

@@ -61,5 +61,17 @@ namespace BookLoanApp.Controllers
             }
 
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Details(int? id)
+        {
+
+            if (id != null)
+            {
+                var user = await _userInterface.GetUserById(id);
+                return View(user);
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

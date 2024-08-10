@@ -1,0 +1,178 @@
+﻿@using BookLoanApp.Enums
+@using BookLoanApp.Models
+@model UserModel
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-selected="true" aria-controls="nav-home">Details - General</button>
+        <button class="nav-link" id="nav-profuke-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-selected="true" aria-controls="nav-profile">Details - Adress</button>
+
+    </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="container mt-5">
+            <form method="post" asp-action="ChangeUserDetails" asp-controller="User">
+                <input type="hidden" asp-for="Id" />
+
+                @if (Model.Profile != ProfilesEnum.Client)
+                {
+                    <h2>Employee details - @Model.UserName</h2>
+                }
+                else
+                {
+                    <h2>Client detail - @Model.UserName</h2>
+                }
+
+                <div class="mb-1">
+                    <label>Full Name:</label>
+                    <input asp-for="FullName" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="mb-1">
+                    <label>Username:</label>
+                    <input asp-for="UserName" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+
+                <div class="mb-1">
+                    <label>E-mail:</label>
+                    <input asp-for="Email" type="email" class="form-control shadow-none" disabled />
+                </div>
+
+                @if (Model.Profile != ProfilesEnum.Client)
+                {
+                    <div class="mb-1">
+                        <label>Profile:</label>
+                        <input asp-for="Profile" type="text" class="form-control shadow-none" disabled />
+                    </div>
+
+
+                    <div class="mb-1">
+                        <label>Shift:</label>
+                        <input asp-for="Turno" type="text" class="form-control shadow-none" disabled />
+                    </div>
+                }
+
+
+
+                <div class="mb-1">
+                    <label>Full Name:</label>
+                    <input asp-for="FullName" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+
+                <div class="mb-1">
+                    <label>Situation:</label>
+                    <input value="@(Model.Situation == true ? "Ative" : "Inative")" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="mb-1">
+                    <label>Register Date:</label>
+                    <input asp-for="RegisterDate" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="mb-1">
+                    <label>Last Alteration Date:</label>
+                    <input asp-for="LastAlterationDate" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+
+
+                <div class="d-flex mt-3">
+                    @if (Model.Situation == false)
+                    {
+                        <button type="submit" class="btn btn-success w-100 "><i class="bi bi-plus"></i>Enable user!</button>
+                    }
+                    else
+                    {
+
+                        <button type="submit" class="btn btn-danger w-100 "><i class="bi bi-x"></i>Disable user</button>
+                    }
+                </div>
+
+
+                @if (Model.Profile == ProfilesEnum.Client)
+                {
+                    <a asp-controller="Client" asp-action="Index" asp-route-id="0" class="btn btn-info w-100 mt-2"><i class=bi bi-arrow-left-circle"></i>Back</a>
+                }
+                else
+                {
+
+                    <a asp-controller="Employee" asp-action="Index" class="btn btn-info w-100 mt-2"><i class=bi bi-arrow-left-circle"></i>Back</a>
+
+                }
+
+
+
+
+
+
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="container mt-5">
+            <form method="post" asp-controller="User" asp-action="ChangeUserDetails">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-1">
+                    <label>Zip Code:</label>
+                    <input asp-for="Adress.Zipcode" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="mb-1">
+                    <label>Street adress:</label>
+                    <input asp-for="Adress.StreetAdress" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="mb-1">
+                    <label>Door Number:</label>
+                    <input asp-for="Adress.DoorNumber" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="mb-1">
+                    <label>State:</label>
+                    <input asp-for="Adress.State" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="mb-1">
+                    <label>City:</label>
+                    <input asp-for="Adress.City" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="mb-1">
+                    <label>Country:</label>
+                    <input asp-for="Adress.Country" type="text" class="form-control shadow-none" disabled />
+                </div>
+
+                <div class="d-flex mt-3">
+                    @if (Model.Situation == false)
+                    {
+                        <button type="submit" class="btn btn-success w-100 "><i class="bi bi-plus"></i>Enable user!</button>
+                    }
+                    else
+                    {
+
+                        <button type="submit" class="btn btn-danger w-100 "><i class="bi bi-x"></i>Disable user!</button>
+                    }
+
+
+                </div>
+
+                @if (Model.Profile == ProfilesEnum.Client)
+                {
+                    <a asp-controller="Client" asp-action="Index" asp-route-id="0" class="btn btn-info w-100 mt-2"><i class=bi bi-arrow-left-circle"></i>Back</a>
+                }
+                else
+                {
+
+                    <a asp-controller="Employee" asp-action="Index" class="btn btn-info w-100 mt-2"><i class=bi bi-arrow-left-circle"></i>Back</a>
+
+                }
+
+            </form>
+        </div>
+    </div>
+</div>

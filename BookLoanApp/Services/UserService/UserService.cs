@@ -3,6 +3,7 @@ using BookLoanApp.Dto.User;
 using BookLoanApp.Models;
 using BookLoanApp.Services.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BookLoanApp.Services.UserService
 {
@@ -36,6 +37,20 @@ namespace BookLoanApp.Services.UserService
                 throw new Exception(ex.Message);
 
             }
+        }
+
+        public async Task<UserModel> GetUserById(int? id)
+        {
+            try
+            {
+                var user = await _dbContext.Users.Include(e =>e.Adress).FirstOrDefaultAsync(x => x.Id == id);
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
 
         public async Task<List<UserModel>> GetUsers(int? id)

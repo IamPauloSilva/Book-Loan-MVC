@@ -10,5 +10,6 @@ namespace BookLoanApp.Services.UserService
         Task<UserCreationDto> Register(UserCreationDto userCreationDto);
 
         Task<UserModel> GetUserById(int? id);
+        Task<UserModel> ChangeUserSituation(int? id);
     }
 }

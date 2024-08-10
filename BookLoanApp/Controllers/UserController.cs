@@ -1,5 +1,6 @@
 ﻿using BookLoanApp.Dto.User;
 using BookLoanApp.Enums;
+using BookLoanApp.Models;
 using BookLoanApp.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -72,6 +73,40 @@ namespace BookLoanApp.Controllers
                 return View(user);
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ChangeUserSituation(UserModel userModel)
+        {
+            if (userModel.Id != 0 && userModel.Id != null)
+            {
+                var userDb = await _userInterface.ChangeUserSituation(userModel.Id);
+
+
+                if (userDb.Situation == true)
+                {
+                    TempData["MensagemSucesso"] = "User sucessfully activated!";
+                }
+                else
+                {
+                    TempData["MensagemSucesso"] = "User sucessfully inactivated!";
+                }
+
+                if (userDb.Profile != ProfilesEnum.Client)
+                {
+                    return RedirectToAction("Index", "Employee");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Client", new { Id = "0" });
+                }
+
+
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

@@ -18,6 +18,40 @@ namespace BookLoanApp.Services.UserService
             _authenticationInterface = authenticationInterface;
         }
 
+        public async Task<UserModel> ChangeUserSituation(int? id)
+        {
+            try
+            {
+                var userChangeSituation = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+                if (userChangeSituation != null)
+                {
+                    if (userChangeSituation.Situation == true)
+                    {
+                        userChangeSituation.Situation = false;
+                        userChangeSituation.LastAlterationDate = DateTime.Now;
+
+                    }
+                    else
+                    {
+                        userChangeSituation.Situation = true;
+                        userChangeSituation.LastAlterationDate = DateTime.Now;
+                    }
+
+                    _dbContext.Update(userChangeSituation);
+                    await _dbContext.SaveChangesAsync();
+
+                    return userChangeSituation;
+                }
+
+                return userChangeSituation;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> CheckIfUserAlreadyExists(UserCreationDto userCreationDto)
         {
             try

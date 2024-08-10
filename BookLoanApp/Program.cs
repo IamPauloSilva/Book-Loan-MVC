@@ -1,6 +1,7 @@
 using BookLoanApp.Data;
 using BookLoanApp.Services.Authentication;
 using BookLoanApp.Services.BookService;
+using BookLoanApp.Services.SessionService;
 using BookLoanApp.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +16,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAutoMapper(typeof(Program));
-
 builder.Services.AddScoped<IBookInterface, BookService >();
 builder.Services.AddScoped<IUserInterface, UserService>();
 builder.Services.AddScoped<IAuthenticationInterface, AuthenticationService>();
+builder.Services.AddScoped<ISessionInterface, SessionService>();
+
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -38,8 +47,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Book}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

@@ -29,7 +29,7 @@
                         @if (Model.User.LoanList
                        .Where(loan => loan.BookId == Model.BookId
                        && loan.DeliverDate == null
-                       && loan.User.Id == ViewBag.UserLogged).Count() > 0)
+                       && loan.User.Id == ViewBag.LoggedUser).Count() > 0)
                         {
                             <button class="btn btn-warn w-10" style=" border-radius:10px" disabled>
                                 Your already got that book!
@@ -37,12 +37,12 @@
                         }
                         else
                         {
-                            <a class="btn btn-success w-10" style=" border-radius:10px" asp-action="Lend" asp-controller="Loan" asp-route-id="@Model.Books.Id">Emprestar</a>
+                            <a class="btn btn-success w-10" style=" border-radius:10px" asp-action="Lend" asp-controller="Loan" asp-route-id="@Model.Books.Id">Get loan</a>
                         }
                     }
                     else
                     {
-                        <a class="btn btn-success w-10" style=" border-radius:10px" asp-action="Lend" asp-controller="Loan" asp-route-id="@Model.Books.Id">Emprestar</a>
+                        <a class="btn btn-success w-10" style=" border-radius:10px" asp-action="Lend" asp-controller="Loan" asp-route-id="@Model.Books.Id">Get loan</a>
                     }
                 }
                 else

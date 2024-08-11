@@ -30,7 +30,7 @@
             @foreach (var report in Enum.GetValues(typeof(ReportEnum)))
             {
 
-                <div class="card card-livros" style="width: 20rem; margin-left: 20px; margin-bottom:20px">
+                <div class="card card-livros" style="width: 25rem; margin-left: 20px; margin-bottom:20px">
                     <div class="card-body">
                         <h5 class="card-title text-center" style="font-size:11px">@report.ToString()</h5>
                         <a type="submit" class="btn btn-success w-100" style="font-size:12px" asp-action="Generate" asp-controller="Report" asp-route-id="@report.GetHashCode()">Excel</a>

@@ -16,7 +16,7 @@ namespace BookLoanApp.Dto.Report
 
         public string Email { get; set; } = string.Empty;
 
-        public bool Situation { get; set; }
+        public string Situation { get; set; }
 
         public DateTime RegisterDate { get; set; } = DateTime.Now;
         public DateTime LastAlterationDate { get; set; } = DateTime.Now;

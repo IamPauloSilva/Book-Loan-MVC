@@ -140,5 +140,34 @@ namespace BookLoanApp.Services.LoanService
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<List<LoanModel>> GetAllLoans(string type = null)
+        {
+            try
+            {
+                if (type == null)
+                {
+                    var returnedLoans = await _appDbContext.Loans
+                        .Include(book => book.Books)
+                        .Include(user =>  user.User)
+                        .Where(loan => loan.DeliverDate != null).ToListAsync();
+                    
+                    return returnedLoans;
+                }
+                else
+                {
+                    var returnedLoans = await _appDbContext.Loans
+                        .Include(book => book.Books)
+                        .Include(user => user.User)
+                        .Where(loan => loan.DeliverDate == null).ToListAsync();
+
+                    return returnedLoans;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

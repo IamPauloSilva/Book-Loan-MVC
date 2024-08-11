@@ -3,6 +3,7 @@ using BookLoanApp.Services.Authentication;
 using BookLoanApp.Services.BookService;
 using BookLoanApp.Services.HomeService;
 using BookLoanApp.Services.LoanService;
+using BookLoanApp.Services.ReportService;
 using BookLoanApp.Services.SessionService;
 using BookLoanApp.Services.UserService;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ builder.Services.AddScoped<IAuthenticationInterface, AuthenticationService>();
 builder.Services.AddScoped<ISessionInterface, SessionService>();
 builder.Services.AddScoped<IHomeInterface, HomeService>();
 builder.Services.AddScoped<ILoanInterface, LoanService>();
+builder.Services.AddScoped<IReportInterface, ReportService>();
 
 builder.Services.AddSession(options =>
 {

@@ -15,6 +15,6 @@ namespace BookLoanApp.Dto.Report
         public string ISBN { get; set; }
         public string Title { get; set; }
         public DateTime LoanDate { get; set; } = DateTime.Now;
-        public DateTime? DeliverDate { get; set; }
+        public DateTime DeliverDate { get; set; }
     }
 }

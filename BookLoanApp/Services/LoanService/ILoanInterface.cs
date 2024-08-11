@@ -11,5 +11,7 @@ namespace BookLoanApp.Services.LoanService
         Task<List<LoanModel>> GetLoans(UserModel userSession);
 
         Task<LoanModel> Deliver(int id);
+
+        Task<List<LoanModel>> GetAllLoans(string type = null);
     }
 }

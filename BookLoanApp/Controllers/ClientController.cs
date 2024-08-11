@@ -1,10 +1,12 @@
-﻿using BookLoanApp.Services.LoanService;
+﻿using BookLoanApp.Filters;
+using BookLoanApp.Services.LoanService;
 using BookLoanApp.Services.SessionService;
 using BookLoanApp.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLoanApp.Controllers
 {
+    [LoggedUser]
     public class ClientController : Controller
     {
         private readonly IUserInterface _userInterface;
@@ -23,6 +25,7 @@ namespace BookLoanApp.Controllers
             return View(clients);
         }
 
+        [LoggedUserAdmin]
         public async Task<ActionResult> Profile(string search = null, string filter = "NotReturned")
         {
             var userSession = _sessionInterface.GetSession();

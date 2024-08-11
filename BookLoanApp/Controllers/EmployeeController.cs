@@ -1,8 +1,11 @@
-﻿using BookLoanApp.Services.UserService;
+﻿using BookLoanApp.Filters;
+using BookLoanApp.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLoanApp.Controllers
 {
+    [LoggedUser]
+    [LoggedUserClient]
     public class EmployeeController : Controller
     {
         private readonly IUserInterface _userInterface;

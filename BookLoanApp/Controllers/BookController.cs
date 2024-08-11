@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using BookLoanApp.Data;
 using BookLoanApp.Dto.Book;
+using BookLoanApp.Filters;
 using BookLoanApp.Models;
 using BookLoanApp.Services.BookService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLoanApp.Controllers
 {
+    [LoggedUser]
+    [LoggedUserClient]
     public class BookController : Controller
     {
         private readonly IBookInterface _bookInterface;

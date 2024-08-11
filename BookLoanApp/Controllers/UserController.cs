@@ -2,12 +2,15 @@
 using BookLoanApp.Dto.Adress;
 using BookLoanApp.Dto.User;
 using BookLoanApp.Enums;
+using BookLoanApp.Filters;
 using BookLoanApp.Models;
 using BookLoanApp.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLoanApp.Controllers
 {
+    [LoggedUser]
+    [LoggedUserClient]
     public class UserController : Controller
     {
         private readonly IUserInterface _userInterface;

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookLoanApp.Dto.Report;
+using BookLoanApp.Filters;
 using BookLoanApp.Models;
 using BookLoanApp.Services.BookService;
 using BookLoanApp.Services.LoanService;
@@ -12,6 +13,8 @@ using System.Data;
 
 namespace BookLoanApp.Controllers
 {
+    [LoggedUser]
+    [LoggedUserClient]
     public class ReportController : Controller
     {
         private readonly ISessionInterface _sessionInterface; 

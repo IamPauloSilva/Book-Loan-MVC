@@ -13,5 +13,6 @@ namespace BookLoanApp.Data
         public DbSet<UserModel> Users { get; set; }
 
         public DbSet<AdressModel> Adresses { get; set; }
+        public DbSet<LoanModel> Loans { get; set; }
     }
 }

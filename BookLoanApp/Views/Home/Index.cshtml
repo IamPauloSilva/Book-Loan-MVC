@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using BookLoanApp.Models
+@model IEnumerable<BooksModel>
+
+@{
+    Layout = ViewBag.PageLayout;
 }
 
 @if (TempData["MensagemSucesso"] != null)
@@ -16,7 +19,37 @@
     </div>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="py-5">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <form method="get" asp-action="Index" asp-controller="Home" class="d-flex justify-content-center">
+                <input name="search" class="form-control w-50 mx-2" style="border:1px solid black; border-radius: 10px" />
+                <button type="submit" class="btn btn-primary w-10" style="border-radius:10px">Search</button>
+            </form>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-0 ">
+            @if (Model != null)
+            {
+                if (Model.Count() > 0)
+                {
+                    @foreach (var book in Model.Where(b => b.StockAmount > 0).ToList())
+                    {
+                        <div class="card" style="width:14rem; margin-left: 20px; margin-bottom:20px">
+                            <img src="/Images/@book.Cape" class="card-img-top align-items-center" style="width:222px; height250px" />
+                            <div class="card-body">
+                                <h5 class="card-title">@book.Title</h5>
+                                <p class="card-text">@book.Author</p>
+                                <a class="btn btn-primary w-100" style="font-size:16px" asp-action="Details" asp-controller="Home" asp-route-id="@book.Id">Details</a>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+
+    </div>
 </div>

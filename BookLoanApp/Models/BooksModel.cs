@@ -23,6 +23,8 @@ namespace BookLoanApp.Models
         [Required]
         public int StockAmount { get; set; }
 
+        public List<LoanModel> Loans { get; set; }
+
         public DateTime RegisterDate { get; set; } = DateTime.Now;
         public DateTime LastAlterationDate { get; set; } = DateTime.Now;
     }

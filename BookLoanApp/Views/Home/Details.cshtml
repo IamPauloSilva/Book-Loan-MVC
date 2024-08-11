@@ -1,0 +1,66 @@
+﻿@using BookLoanApp.Models
+@model LoanModel
+
+@{
+    Layout = ViewBag.PageLayout;
+}
+
+
+
+<div class="container d-flex  gap-5 justify-content-center align-items-center mt-5">
+    <div class="img">
+        <img src="/Images/@Model.Books.Cape" style="width:350px; height:550px; border-radius:10px" />
+    </div>
+    <div>
+        <h2 style="font-size:22px">@Model.Books.Title</h2>
+        <h3>@Model.Books.Author</h3>
+        <p>@Model.Books.Description</p>
+        <h5>PublicationYear: @Model.Books.PublicationYear</h5>
+
+        <div>
+            <p>Stock Amount: @Model.Books.StockAmount</p>
+
+            @if (Model.User != null)
+            {
+                @if (Model.User.Profile == BookLoanApp.Enums.ProfilesEnum.Client)
+                {
+                    @if (ViewBag.Loans != "No Loans")
+                    {
+                        @if (Model.User.LoanList
+                       .Where(loan => loan.BookId == Model.BookId
+                       && loan.DeliverDate == null
+                       && loan.User.Id == ViewBag.UserLogged).Count() > 0)
+                        {
+                            <button class="btn btn-warn w-10" style=" border-radius:10px" disabled>
+                                Your already got that book!
+                            </button>
+                        }
+                        else
+                        {
+                            <a class="btn btn-success w-10" style=" border-radius:10px" asp-action="Lend" asp-controller="Loan" asp-route-id="@Model.Books.Id">Emprestar</a>
+                        }
+                    }
+                    else
+                    {
+                        <a class="btn btn-success w-10" style=" border-radius:10px" asp-action="Lend" asp-controller="Loan" asp-route-id="@Model.Books.Id">Emprestar</a>
+                    }
+                }
+                else
+                {
+                    <a class="btn btn-success w-10" style=" border-radius:10px" asp-action="Details" asp-controller="Book" asp-route-id="@Model.Books.Id">Details</a>
+                }
+            }
+            else
+            {
+                <a class="btn btn-success w-10" style=" border-radius:10px" asp-action="Login" asp-controller="Home">
+                    You need to login to request this loan!
+                </a>
+            }
+
+            <a class="btn btn-primary w-10" style=" border-radius:10px" asp-action="Index" asp-controller="Home">
+                Back
+            </a>
+        </div>
+    </div>
+
+</div>

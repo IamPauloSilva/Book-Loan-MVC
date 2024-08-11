@@ -1,4 +1,5 @@
 using BookLoanApp.Dto.Home;
+using BookLoanApp.Services.BookService;
 using BookLoanApp.Services.HomeService;
 using BookLoanApp.Services.SessionService;
 using Microsoft.AspNetCore.Mvc;
@@ -10,17 +11,19 @@ namespace BookLoanApp.Controllers
     {
         private readonly ISessionInterface _sessionInterface;
         private readonly IHomeInterface _homeInterface;
+        private readonly IBookInterface _bookInterface;
 
-        public HomeController(ISessionInterface sessionInterface, IHomeInterface homeInterface)
+        public HomeController(ISessionInterface sessionInterface, IHomeInterface homeInterface, IBookInterface bookInterface)
         {
             _sessionInterface = sessionInterface;
             _homeInterface = homeInterface;
+            _bookInterface = bookInterface;
         }
 
         public IHomeInterface HomeInterface { get; }
 
         [HttpGet]
-        public ActionResult Index()
+        public async Task<ActionResult> Index(string search = null)
         {
             var userSession = _sessionInterface.GetSession();
             if (userSession != null)
@@ -32,6 +35,16 @@ namespace BookLoanApp.Controllers
                 ViewBag.PageLayout = "_Layout_NotLogged";
             }
 
+            if(search == null)
+            {
+                var booksDB = await _bookInterface.GetBooks();
+                return View(booksDB);
+            }
+            else
+            {
+                var booksDB = await _bookInterface.SearchBooks(search);
+                return View(booksDB);
+            }
 
             return View();
         }
@@ -81,6 +94,33 @@ namespace BookLoanApp.Controllers
             _sessionInterface.RemoveSession();
             TempData["MensagemSucesso"] = "User logged out sucessfully";
             return RedirectToAction("Login", "Home");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Details(int? id)
+        {
+            var userSession = _sessionInterface.GetSession();
+
+            if(userSession != null)
+            {
+                ViewBag.LoggedUser = userSession.Id;
+                ViewBag.PageLayout = "_Layout";
+            }
+            else
+            {
+                ViewBag.PageLayout = "_Layout_NotLogged";
+            }
+
+            var book = await _bookInterface.GetBooksById(id, userSession);
+
+            if (book.User != null)
+            {
+                if (book.User.LoanList == null)
+                {
+                    ViewBag.Loans = "No Loans";
+                }
+            }
+            return View(book);
         }
     }
 }

@@ -23,6 +23,8 @@ namespace BookLoanApp.Models
         public DateTime RegisterDate { get; set; } = DateTime.Now;
         public DateTime LastAlterationDate { get; set; } = DateTime.Now;
 
+        public List<LoanModel> LoanList { get; set; }
+
         [Required]
         public ProfilesEnum Profile { get; set; }
         [Required]

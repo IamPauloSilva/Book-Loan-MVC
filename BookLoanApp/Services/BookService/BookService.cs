@@ -137,5 +137,66 @@ namespace BookLoanApp.Services.BookService
             }
         }
 
+        public async Task<List<BooksModel>> SearchBooks(string search)
+        {
+            try
+            {
+                var books = await _context.Books
+                    .Where(book => book.Title.Contains(search) ||  book.Author.Contains(search)).ToListAsync();
+                return books;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<LoanModel> GetBooksById(int? id, UserModel userSession)
+        {
+            try
+            {
+                if(userSession == null)
+                {
+                    var noUserLoan = await _context.Loans
+                        .Include(l => l.Books)
+                        .FirstOrDefaultAsync(e => e.BookId == id);
+
+                    if(noUserLoan == null)
+                    {
+                        var book = await GetBooksById(id);
+
+                        var loanDB = new LoanModel
+                        {
+                            Books = book,
+                            User = null
+                        };
+                        return loanDB;
+                    }
+                    return noUserLoan;
+                }
+
+                var loan = await _context.Loans
+                    .Include(l => l.Books)
+                    .Include(u => u.User)
+                    .FirstOrDefaultAsync(e => e.BookId == id && e.DeliverDate == null && e.UserId == userSession.Id);
+
+                if(loan == null)
+                {
+                    var book = await GetBooksById(id);
+                    var loanDB = new LoanModel
+                    {
+                        Books = book,
+                        User = userSession
+                    };
+                    return loanDB;
+                }
+                return loan;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

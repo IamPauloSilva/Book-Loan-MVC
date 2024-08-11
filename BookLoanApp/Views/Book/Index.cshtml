@@ -19,7 +19,7 @@
 <div class="container mt-5">
 
     <div class="btn-box d-flex justify-content-between align-items-center mb-3">
-        <h2>Books Register</h2>
+        <h2>Books</h2>
         <a class="btn btn-success" asp-action="Register" asp-controller="Book"><i class="bi bi-plus-circle"></i> Register new book</a>
     </div>
 
@@ -27,11 +27,11 @@
         <thead>
             <tr>
                 <th></th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Genre</th>
-                <th>Stock Quantity</th>
-                <th>Register Date</th>
+                <th style="text-align: center; vertical-align: middle;">Title</th>
+                <th style="text-align: center; vertical-align: middle;">Author</th>
+                <th style="text-align: center; vertical-align: middle;">Genre</th>
+                <th style="text-align: center; vertical-align: middle;">Stock Quantity</th>
+                <th style="text-align: center; vertical-align: middle;">Register Date</th>
                 <th></th>
             </tr>
         </thead>
@@ -59,11 +59,11 @@
 
 
 
-                            <td><i class="bi bi-people"></i>@livro.Title</td>
-                            <td>@livro.Author</td>
-                            <td>@livro.Genre</td>
-                            <td><i class="bi bi-envelope-at"></i>@livro.StockAmount</td>
-                            <td><i class="bi bi-calendar"></i>@livro.RegisterDate</td>
+                            <td style="text-align: center; vertical-align: middle;"><i class="bi bi-people"></i>@livro.Title</td>
+                            <td style="text-align: center; vertical-align: middle;">@livro.Author</td>
+                            <td style="text-align: center; vertical-align: middle;">@livro.Genre</td>
+                            <td style="text-align: center; vertical-align: middle;"><i class="bi bi-envelope-at"></i>@livro.StockAmount</td>
+                            <td style="text-align: center; vertical-align: middle;"><i class="bi bi-calendar"></i>@livro.RegisterDate</td>
                             <td>
                                 <a class="btn btn-warning" asp-action="Details" asp-controller="Book" asp-route-id="@livro.Id"><i class="bi bi-file-earmark-zip"></i>Details</a>
                                 <a class="btn btn-info" asp-action="Edit" asp-controller="Book" asp-route-id="@livro.Id"><i class="bi bi-pencil"></i>Edit</a>

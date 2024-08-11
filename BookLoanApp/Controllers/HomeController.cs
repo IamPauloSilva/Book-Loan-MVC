@@ -4,6 +4,7 @@ using BookLoanApp.Services.HomeService;
 using BookLoanApp.Services.SessionService;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace BookLoanApp.Controllers
 {
@@ -20,8 +21,6 @@ namespace BookLoanApp.Controllers
             _bookInterface = bookInterface;
         }
 
-        public IHomeInterface HomeInterface { get; }
-
         [HttpGet]
         public async Task<ActionResult> Index(string search = null)
         {
@@ -35,7 +34,7 @@ namespace BookLoanApp.Controllers
                 ViewBag.PageLayout = "_Layout_NotLogged";
             }
 
-            if(search == null)
+            if (search == null)
             {
                 var booksDB = await _bookInterface.GetBooks();
                 return View(booksDB);
@@ -45,34 +44,33 @@ namespace BookLoanApp.Controllers
                 var booksDB = await _bookInterface.SearchBooks(search);
                 return View(booksDB);
             }
-
-            return View();
         }
+
         [HttpGet]
         public ActionResult Login()
         {
-
             if (_sessionInterface.GetSession() != null)
             {
                 return RedirectToAction("Index", "Home");
             }
             return View();
         }
+
         [HttpPost]
         public async Task<ActionResult> Login(LoginDto loginDto)
         {
             if (ModelState.IsValid)
             {
                 var login = await _homeInterface.DoLogin(loginDto);
-                if (login.Status == false)
+                if (!login.Status)
                 {
                     TempData["MensagemErro"] = login.Message;
                     return View(login.Data);
                 }
 
-                if (login.Data.Situation == false)
+                if (!login.Data.Situation)
                 {
-                    TempData["MensagemErro"] = "Your account is inactive. please contact support!";
+                    TempData["MensagemErro"] = "Your account is inactive. Please contact support!";
                     return View("Login");
                 }
 
@@ -81,7 +79,6 @@ namespace BookLoanApp.Controllers
 
                 return RedirectToAction("Index");
             }
-
             else
             {
                 return View();
@@ -89,10 +86,10 @@ namespace BookLoanApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult Logout() 
+        public ActionResult Logout()
         {
             _sessionInterface.RemoveSession();
-            TempData["MensagemSucesso"] = "User logged out sucessfully";
+            TempData["MensagemSucesso"] = "User logged out successfully";
             return RedirectToAction("Login", "Home");
         }
 
@@ -101,7 +98,7 @@ namespace BookLoanApp.Controllers
         {
             var userSession = _sessionInterface.GetSession();
 
-            if(userSession != null)
+            if (userSession != null)
             {
                 ViewBag.LoggedUser = userSession.Id;
                 ViewBag.PageLayout = "_Layout";
@@ -121,6 +118,54 @@ namespace BookLoanApp.Controllers
                 }
             }
             return View(book);
+        }
+
+        
+        [HttpGet]
+        public async Task<ActionResult> DemoAdmin()
+        {
+            var loginDto = new LoginDto
+            {
+                Email = "admin@example.com", 
+                Password = "AdminPassword123!" 
+            };
+
+            return await DemoLogin(loginDto);
+        }
+
+        
+        [HttpGet]
+        public async Task<ActionResult> DemoClient()
+        {
+            var loginDto = new LoginDto
+            {
+                Email = "client@example.com", 
+                Password = "ClientPassword123!" 
+            };
+
+            return await DemoLogin(loginDto);
+        }
+
+        
+        private async Task<ActionResult> DemoLogin(LoginDto loginDto)
+        {
+            var login = await _homeInterface.DoLogin(loginDto);
+            if (!login.Status)
+            {
+                TempData["MensagemErro"] = login.Message;
+                return RedirectToAction("Login");
+            }
+
+            if (!login.Data.Situation)
+            {
+                TempData["MensagemErro"] = "The demo account is inactive. Please contact support!";
+                return RedirectToAction("Login");
+            }
+
+            _sessionInterface.CreateSession(login.Data);
+            TempData["MensagemSucesso"] = login.Message;
+
+            return RedirectToAction("Index");
         }
     }
 }

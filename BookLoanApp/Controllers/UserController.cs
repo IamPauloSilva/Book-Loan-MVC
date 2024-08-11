@@ -9,8 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookLoanApp.Controllers
 {
-    [LoggedUser]
-    [LoggedUserClient]
+    
     public class UserController : Controller
     {
         private readonly IUserInterface _userInterface;
@@ -21,6 +20,9 @@ namespace BookLoanApp.Controllers
             _userInterface = userInterface;
             _mapper = mapper;
         }
+
+        [LoggedUser]
+        [LoggedUserClient]
         public async Task<ActionResult> Index(int? id)
         {
             var users = await _userInterface.GetUsers(id);
@@ -74,6 +76,8 @@ namespace BookLoanApp.Controllers
         }
 
         [HttpGet]
+        [LoggedUser]
+        [LoggedUserClient]
         public async Task<ActionResult> Details(int? id)
         {
 
@@ -86,6 +90,8 @@ namespace BookLoanApp.Controllers
         }
 
         [HttpPost]
+        [LoggedUser]
+        [LoggedUserClient]
         public async Task<ActionResult> ChangeUserSituation(UserModel userModel)
         {
             if (userModel.Id != 0 && userModel.Id != null)
@@ -119,6 +125,9 @@ namespace BookLoanApp.Controllers
             }
         }
 
+        [HttpGet]
+        [LoggedUser]
+        [LoggedUserClient]
         public async Task<IActionResult> Edit(int? Id)
         {
             if (Id != null)
@@ -151,6 +160,8 @@ namespace BookLoanApp.Controllers
 
         }
         [HttpPost]
+        [LoggedUser]
+        [LoggedUserClient]
         public async Task<ActionResult> Edit(UserEditDto userEditDto)
         {
             if (ModelState.IsValid)

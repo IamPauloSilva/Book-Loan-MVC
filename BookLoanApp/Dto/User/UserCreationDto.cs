@@ -16,7 +16,7 @@ namespace BookLoanApp.Dto.User
         [Required(ErrorMessage = "Enter a email!")]
         public string Email { get; set; } = string.Empty;
         [Required(ErrorMessage = "Enter a situation!")]
-        public bool Situation { get; set; }
+        public bool Situation { get; set; } = true;
         [Required(ErrorMessage = "Enter a password!"),MinLength(6,ErrorMessage ="6 characters minimum")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Confirm password!"), Compare("Password",ErrorMessage ="Password does not match!")]

@@ -1,7 +1,7 @@
 ﻿@using BookLoanApp.Models
 @model UserModel
 
-<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Book Loan Project</a>
+<a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">Book Loan Project</a>
 
 
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -11,26 +11,26 @@
 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
     <ul class="navbar-nav flex-grow-1">
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
         </li>
     </ul>
 
-    <ul class="navbar-nav navbar-right">
+    <ul class="navbar-nav navbar-right ">
         <li class="nav-item dropdown">
             @if(Model != null && Model.Profile != BookLoanApp.Enums.ProfilesEnum.Client)
             {
-                <a class="nav-link dropp-toggle" href="#" data-bs-toggle="dropdown">
+                <a class="nav-link dropp-toggle text-white" href="#" data-bs-toggle="dropdown">
                     Admin Panel
                     <span class="caret"></span>
                 </a>
 
-                <ul class="dropdown-menu flex-grow-1 bg-primary">
-                    <li><a class="nav-link dropdown-item text-light" asp-controller="Employee" asp-action="Index">Users</a></li>
-                    <li><a class="nav-link dropdown-item text-light" asp-controller="Client" asp-action="Index" asp-route-id="0">Clients</a></li>
+                <ul class="dropdown-menu flex-grow-1 bg-primary text-white">
+                    <li><a class="nav-link dropdown-item text-white" asp-controller="Employee" asp-action="Index">Users</a></li>
+                    <li><a class="nav-link dropdown-item text-white" asp-controller="Client" asp-action="Index" asp-route-id="0">Clients</a></li>
                     <div class="dropdown-divides"></div>
-                    <li><a class="nav-link dropdown-item text-light" asp-controller="Book" asp-action="Index">Books</a></li>
+                    <li><a class="nav-link dropdown-item text-white" asp-controller="Book" asp-action="Index">Books</a></li>
                     <div class="dropdown-divides"></div>
-                    <li><a class="nav-link dropdown-item text-light" asp-controller="Report" asp-action="Index">Reports</a></li>
+                    <li><a class="nav-link dropdown-item text-white" asp-controller="Report" asp-action="Index">Reports</a></li>
                 </ul>
             }
            
@@ -39,18 +39,18 @@
         @if (Model != null && Model.Profile == BookLoanApp.Enums.ProfilesEnum.Client)
         {
             <li>
-                <a class="nav-link" asp-controller="Client" asp-action="Profile">My Profile </a>
+                <a class="nav-link text-white" asp-controller="Client" asp-action="Profile">My Profile </a>
             </li>
         }
 
         <li>
             @if(Model != null)
             {
-                <a class="nav-link" asp-controller="Home" asp-action="Logout">Logout</a>
+                <a class="nav-link text-white" asp-controller="Home" asp-action="Logout">Logout</a>
             }
             else
             {
-                <a class="nav-link" asp-controller="Home" asp-action="Login">Login</a>
+                <a class="nav-link text-white" asp-controller="Home" asp-action="Login">Login</a>
             }
         </li>
 

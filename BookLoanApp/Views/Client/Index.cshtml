@@ -22,7 +22,7 @@
 <div class="container mt-5">
 
     <div class="btn-box d-flex justify-content-between align-items-center mb-3">
-        <h2>Register Clients!</h2>
+        <h2>Clients</h2>
         <a asp-controller="User" asp-action="Register" asp-route-id="0" class="btn-success btn"><i class="bi bi-plus-circle"></i> Register new client</a>
     </div>
 
@@ -30,11 +30,11 @@
         <thead>
             <tr>
                 <th></th>
-                <th scope="col">User</th>
-                <th scope="col">Name</th>
-                <th scope="col">State</th>
-                <th scope="col">Email</th>
-                <th scope="col">Register Date</th>
+                <th style="text-align: center; vertical-align: middle;" scope="col">User</th>
+                <th style="text-align: center; vertical-align: middle;" scope="col">Name</th>
+                <th style="text-align: center; vertical-align: middle;" scope="col">State</th>
+                <th style="text-align: center; vertical-align: middle;" scope="col">Email</th>
+                <th style="text-align: center; vertical-align: middle;" scope="col">Register Date</th>
                 <th></th>
             </tr>
         </thead>
@@ -46,31 +46,28 @@
                     <tr>
                         @if (user.Situation == true)
                         {
-                            <td>
+                            <td style="text-align: center; vertical-align: middle;">
                                 <img src="~/img/Ativo.png" style="width: 25px; height: 25px" />
                             </td>
                         }
                         else
                         {
-                            <td>
+                            <td style="text-align: center; vertical-align: middle;">
                                 <img src="~/img/Inativo.png" style="width: 25px; height: 25px" />
                             </td>
                         }
-                        <th scope="row"><i class="bi bi-people"></i> @user.UserName</th>
-                        <td>@user.FullName</td>
-                        <td>@user.Adress.State</td>
-                        <td><i class="bi bi-envelope-at"></i> @user.Email</td>
-                        <td><i class="bi bi-calendar"></i> @user.RegisterDate.ToString("dd/MM/yyyy")</td>
-                        <td>
+                        <th scope="row" style="text-align: center; vertical-align: middle;"><i class="bi bi-people"></i> @user.UserName</th>
+                        <td style="text-align: center; vertical-align: middle;">@user.FullName</td>
+                        <td style="text-align: center; vertical-align: middle;">@user.Adress.State</td>
+                        <td style="text-align: center; vertical-align: middle;"><i class="bi bi-envelope-at"></i> @user.Email</td>
+                        <td style="text-align: center; vertical-align: middle;"><i class="bi bi-calendar"></i> @user.RegisterDate.ToString("dd/MM/yyyy")</td>
+                        <td style="text-align: center; vertical-align: middle;">
                             <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id" class="btn-warning btn"><i class="bi bi-file-earmark-zip"></i> Details</a>
                             <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" class="btn-info btn"><i class="bi bi-pencil"></i> Edit</a>
                         </td>
                     </tr>
                 }
             }
-
-
-
         </tbody>
     </table>
 </div>

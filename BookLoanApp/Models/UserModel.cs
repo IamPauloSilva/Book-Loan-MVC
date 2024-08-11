@@ -15,7 +15,7 @@ namespace BookLoanApp.Models
         [Required]
         public string Email { get; set; } = string.Empty;
         [Required]
-        public bool Situation { get; set; }
+        public bool Situation { get; set; } = true;
         [Required]
         public byte[] HashPass { get; set; }
         [Required]

@@ -3,6 +3,6 @@ builder = "dockerfile"
 dockerfilePath = "./Dockerfile"
 
 [deploy]
-startCommand = "./BookLoanApp"
+startCommand = "dotnet BookLoanApp.dll"
 restartPolicyType = "always"
 healthcheckPath = "/health"

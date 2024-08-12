@@ -4,17 +4,17 @@ public static class ConnectionHelper
 {
     public static string GetConnectionString(IConfiguration configuration)
     {
-        var databaseUrl2 = Environment.GetEnvironmentVariable("DATABASE_URL");
-        if (!string.IsNullOrEmpty(databaseUrl2))
-        {
-            return databaseUrl2;
-        }
 
-        var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL");
+        var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL" ?? "postgresql://postgres:dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA@postgres.railway.internal:5432/railway"
+);
         if (!string.IsNullOrEmpty(databaseUrl))
         {
             return databaseUrl;
         }
+        Console.WriteLine($"PGHOST: {Environment.GetEnvironmentVariable("PGHOST")}");
+        Console.WriteLine($"PGPORT: {Environment.GetEnvironmentVariable("PGPORT")}");
+        Console.WriteLine($"PGUSER: {Environment.GetEnvironmentVariable("PGUSER")}");
+        Console.WriteLine($"PGDATABASE: {Environment.GetEnvironmentVariable("PGDATABASE")}");
 
         return BuildConnectionString(
             Environment.GetEnvironmentVariable("PGUSER") ?? "postgres",
@@ -22,6 +22,8 @@ public static class ConnectionHelper
             Environment.GetEnvironmentVariable("PGDATABASE") ?? "railway",
             Environment.GetEnvironmentVariable("PGHOST") ?? "postgres.railway.internal",
             int.Parse(Environment.GetEnvironmentVariable("PGPORT") ?? "5432")
+
+
         );
     }
 

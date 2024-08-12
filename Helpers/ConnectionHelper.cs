@@ -1,32 +1,28 @@
 ﻿using Npgsql;
+using Microsoft.Extensions.Configuration;
 using System;
 
 public static class ConnectionHelper
 {
     public static string GetConnectionString(IConfiguration configuration)
     {
-        // Para usar a string de conexão explícita, defina-a diretamente aqui
+        // Verifique se a variável DATABASE_URL está configurada
         var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-
-        // Verifica se a variável de ambiente DATABASE_URL está configurada corretamente
         if (!string.IsNullOrEmpty(databaseUrl))
         {
-            // Utilize a string de conexão fornecida pela variável de ambiente
             return databaseUrl;
         }
 
-        // Se DATABASE_URL não estiver definida, use uma string de conexão padrão
-        // (apenas para desenvolvimento local ou fallback)
+        // Fallback para configuração padrão se DATABASE_URL não estiver disponível
         return BuildConnectionString(
-            "postgres", // Usuário
-            "dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA", // Senha
-            "railway", // Banco de dados
-            "postgres.railway.internal", // Host
-            5432 // Porta
+            Environment.GetEnvironmentVariable("PGUSER") ?? "postgres",
+            Environment.GetEnvironmentVariable("PGPASSWORD") ?? "dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA",
+            Environment.GetEnvironmentVariable("PGDATABASE") ?? "railway",
+            Environment.GetEnvironmentVariable("PGHOST") ?? "postgres.railway.internal",
+            int.Parse(Environment.GetEnvironmentVariable("PGPORT") ?? "5432")
         );
     }
 
-    // Método opcional para construir uma string de conexão a partir de parâmetros explícitos
     private static string BuildConnectionString(string username, string password, string database, string host, int port)
     {
         var builder = new NpgsqlConnectionStringBuilder
@@ -37,8 +33,11 @@ public static class ConnectionHelper
             Password = password,
             Database = database,
             SslMode = SslMode.Require,
-            TrustServerCertificate = true // Ajuste conforme necessário para sua configuração de produção
+            TrustServerCertificate = true // Ajuste conforme necessário
         };
+
+        // Para depuração: log da string de conexão gerada
+        Console.WriteLine($"Connection String: {builder.ToString()}");
 
         return builder.ToString();
     }

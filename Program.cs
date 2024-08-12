@@ -13,11 +13,15 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+optionsBuilder.UseNpgsql("Host=viaduct.proxy.rlwy.net;Port=20177;Username=postgres;Password=dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA;Database=railway;SslMode=Require;Trust Server Certificate=True");
+
+using (var context = new AppDbContext(optionsBuilder.Options))
 {
-    var connectionString = ConnectionHelper.GetConnectionString(builder.Configuration);
-    options.UseNpgsql(connectionString);
-});
+    context.Database.Migrate();
+}
+
+Console.WriteLine("Migration completed.");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -42,11 +46,7 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.Migrate();
-}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

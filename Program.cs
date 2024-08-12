@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Configurar o DbContext usando a string de conexão
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql("Host=viaduct.proxy.rlwy.net;Port=20177;Username=postgres;Password=dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA;Database=railway;SslMode=Require;Trust Server Certificate=True");
+    options.UseNpgsql("Host=postgres.railway.internal;Port=5432;Username=postgres;Password=CZhCwJHsnwQxgSXqXsWKjiVXGxIOrMzJ;Database=railway;SslMode=Require;Trust Server Certificate=True");
 });
 
 
@@ -43,6 +43,11 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+if (builder.Environment.IsProduction() && builder.Configuration.GetValue<int?>("PORT") is not null)
+    builder.WebHost.UseUrls($"http://*:{builder.Configuration.GetValue<int>("PORT")}");
+
+var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>();
+await context.Database.MigrateAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

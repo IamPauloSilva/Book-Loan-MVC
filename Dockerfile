@@ -2,6 +2,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+ENV PGHOST=viaduct.proxy.rlwy.net
+ENV PGPORT=20177
+ENV PGUSER=postgres
+ENV PGPASSWORD=dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA
+ENV PGDATABASE=railway
 
 # Copiar o arquivo .csproj e restaurar as dependências
 COPY ["BookLoanApp.csproj", "."]

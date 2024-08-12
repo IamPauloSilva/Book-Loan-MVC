@@ -1,6 +1,6 @@
 [build]
 builder = "dockerfile"
-dockerfilePath = "./BookLoanApp/Dockerfile"
+dockerfilePath = "./Dockerfile"
 
 [deploy]
 startCommand = "./BookLoanApp"

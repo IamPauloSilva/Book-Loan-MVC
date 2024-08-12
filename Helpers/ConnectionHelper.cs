@@ -1,25 +1,21 @@
 ﻿using Npgsql;
-using Microsoft.Extensions.Configuration;
-using System;
 
 public static class ConnectionHelper
 {
     public static string GetConnectionString(IConfiguration configuration)
     {
-        var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+        var databaseUrl2 = Environment.GetEnvironmentVariable("DATABASE_URL");
+        if (!string.IsNullOrEmpty(databaseUrl2))
+        {
+            return databaseUrl2;
+        }
+
+        var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL");
         if (!string.IsNullOrEmpty(databaseUrl))
         {
             return databaseUrl;
         }
 
-        // Usar URL pública se DATABASE_URL não estiver disponível
-        var publicUrl = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL");
-        if (!string.IsNullOrEmpty(publicUrl))
-        {
-            return publicUrl;
-        }
-
-        // Fallback para configuração padrão
         return BuildConnectionString(
             Environment.GetEnvironmentVariable("PGUSER") ?? "postgres",
             Environment.GetEnvironmentVariable("PGPASSWORD") ?? "dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA",
@@ -39,10 +35,9 @@ public static class ConnectionHelper
             Password = password,
             Database = database,
             SslMode = SslMode.Require,
-            TrustServerCertificate = true // Ajuste conforme necessário
+            TrustServerCertificate = true
         };
 
-        // Para depuração: log da string de conexão gerada
         Console.WriteLine($"Connection String: {builder.ToString()}");
 
         return builder.ToString();

@@ -1,4 +1,5 @@
 using BookLoanApp.Data;
+using BookLoanApp.Helpers;
 using BookLoanApp.Services.Authentication;
 using BookLoanApp.Services.BookService;
 using BookLoanApp.Services.HomeService;
@@ -11,13 +12,13 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+builder.Services.AddHealthChecks();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAutoMapper(typeof(Program));
@@ -36,6 +37,8 @@ builder.Services.AddSession(options =>
 });
 
 var app = builder.Build();
+var scope = app.Services.CreateScope();
+await DataHelper.ManageDataAsync(scope.ServiceProvider);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -44,6 +47,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseHealthChecks("/health");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

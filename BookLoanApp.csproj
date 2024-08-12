@@ -4,6 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9bedceb6-58e5-45a6-8b7d-0d014503b4ec</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
+    <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+    <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
 	  
   </PropertyGroup>
 
@@ -11,6 +16,7 @@
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="ClosedXML" Version="0.102.3" />
+    <PackageReference Include="Docker.DotNet" Version="3.125.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
       <PrivateAssets>all</PrivateAssets>
@@ -21,7 +27,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Npgsql" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContainerEnvironmentVariable Include="ASPNETCORE_HTTPS_PORTS">
+      <Value>8081</Value>
+    </ContainerEnvironmentVariable>
   </ItemGroup>
 
 </Project>

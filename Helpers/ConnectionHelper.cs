@@ -6,9 +6,16 @@ namespace BookLoanApp.Helpers
     {
         public static string GetConnectionString(IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            // Tenta obter a URL do banco de dados da variável de ambiente DATABASE_URL
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            return string.IsNullOrEmpty(databaseUrl) ? connectionString : BuildConnectionString(databaseUrl);
+            if (!string.IsNullOrEmpty(databaseUrl))
+            {
+                // Se DATABASE_URL estiver disponível, construa a string de conexão a partir dela
+                return BuildConnectionString(databaseUrl);
+            }
+
+            // Se DATABASE_URL não estiver definida, use a conexão padrão definida no appsettings.json
+            return configuration.GetConnectionString("DefaultConnection");
         }
 
         private static string BuildConnectionString(string databaseUrl)
@@ -22,8 +29,8 @@ namespace BookLoanApp.Helpers
                 Username = userInfo[0],
                 Password = userInfo[1],
                 Database = databaseUri.LocalPath.TrimStart('/'),
-                SslMode = SslMode.Require,
-                TrustServerCertificate = true
+                SslMode = SslMode.Require, // Garantir a criptografia da conexão
+                TrustServerCertificate = true // Pode ser necessário para aceitar certificados autoassinados
             };
             return builder.ToString();
         }

@@ -1,9 +1,5 @@
 ﻿using BookLoanApp.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class DatabaseMigrationService : IHostedService
 {
@@ -24,5 +20,9 @@ public class DatabaseMigrationService : IHostedService
         }
     }
 
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        // Implementação do stop, se necessário
+        return Task.CompletedTask;
+    }
 }

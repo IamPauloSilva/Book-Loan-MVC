@@ -6,14 +6,20 @@ public static class ConnectionHelper
 {
     public static string GetConnectionString(IConfiguration configuration)
     {
-        // Verifique se a variável DATABASE_URL está configurada
         var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
         if (!string.IsNullOrEmpty(databaseUrl))
         {
             return databaseUrl;
         }
 
-        // Fallback para configuração padrão se DATABASE_URL não estiver disponível
+        // Usar URL pública se DATABASE_URL não estiver disponível
+        var publicUrl = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL");
+        if (!string.IsNullOrEmpty(publicUrl))
+        {
+            return publicUrl;
+        }
+
+        // Fallback para configuração padrão
         return BuildConnectionString(
             Environment.GetEnvironmentVariable("PGUSER") ?? "postgres",
             Environment.GetEnvironmentVariable("PGPASSWORD") ?? "dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA",

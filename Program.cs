@@ -14,6 +14,8 @@ using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
 // Obtenha a string de conexão explícita
 var connectionString = ConnectionHelper.GetConnectionString(builder.Configuration);
+Console.WriteLine($"Connection String: {connectionString}"); // Adicione esta linha para depuração
+
 
 // Configure o contexto do banco de dados
 builder.Services.AddDbContext<AppDbContext>(options =>

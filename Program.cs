@@ -8,14 +8,14 @@ using BookLoanApp.Services.ReportService;
 using BookLoanApp.Services.SessionService;
 using BookLoanApp.Services.UserService;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://*:{port}");
-
-
+var connectionString = ConnectionHelper.GetConnectionString(builder.Configuration);
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

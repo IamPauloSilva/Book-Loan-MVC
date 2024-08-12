@@ -5,16 +5,13 @@ namespace BookLoanApp.Helpers
 {
     public static class DataHelper
     {
-
         public static async Task ManageDataAsync(IServiceProvider svcProvider)
         {
-            //Service: An instance of db context
+            // Serviço: Uma instância do db context
             var dbContextSvc = svcProvider.GetRequiredService<AppDbContext>();
 
-            //Migration: This is the programmatic equivalent to Update-Database
+            // Migração: Isto é equivalente ao Update-Database
             await dbContextSvc.Database.MigrateAsync();
         }
-
-
     }
 }

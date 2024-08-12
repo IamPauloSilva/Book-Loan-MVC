@@ -13,15 +13,12 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-optionsBuilder.UseNpgsql("Host=viaduct.proxy.rlwy.net;Port=20177;Username=postgres;Password=dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA;Database=railway;SslMode=Require;Trust Server Certificate=True");
-
-using (var context = new AppDbContext(optionsBuilder.Options))
+// Configurar o DbContext usando a string de conexão
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    context.Database.Migrate();
-}
+    options.UseNpgsql("Host=viaduct.proxy.rlwy.net;Port=20177;Username=postgres;Password=dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA;Database=railway;SslMode=Require;Trust Server Certificate=True");
+});
 
-Console.WriteLine("Migration completed.");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -46,7 +43,20 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-
+// Aplicar migrações ao iniciar a aplicação
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        dbContext.Database.Migrate();
+        Console.WriteLine("Migrações aplicadas com sucesso.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erro ao aplicar migrações: {ex.Message}");
+    }
+}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

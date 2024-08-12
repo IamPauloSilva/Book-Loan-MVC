@@ -5,38 +5,20 @@ public static class ConnectionHelper
 {
     public static string GetConnectionString(IConfiguration configuration)
     {
-        var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL") ?? "postgresql://postgres:dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA@postgres.railway.internal:5432/railway";
+        // Obter variáveis de ambiente diretamente
+        var username = Environment.GetEnvironmentVariable("PGUSER") ?? "postgres";
+        var password = Environment.GetEnvironmentVariable("PGPASSWORD") ?? "password";
+        var database = Environment.GetEnvironmentVariable("PGDATABASE") ?? "database";
+        var host = Environment.GetEnvironmentVariable("PGHOST") ?? "localhost";
+        var portString = Environment.GetEnvironmentVariable("PGPORT") ?? "5432";
 
-        if (!string.IsNullOrEmpty(databaseUrl))
+        if (!int.TryParse(portString, out var port))
         {
-            return ParseDatabaseUrl(databaseUrl);
+            Console.WriteLine($"Port '{portString}' is not a valid integer.");
+            port = 5432; // Default port
         }
 
-        return BuildConnectionString(
-            Environment.GetEnvironmentVariable("PGUSER") ?? "postgres",
-            Environment.GetEnvironmentVariable("PGPASSWORD") ?? "dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA",
-            Environment.GetEnvironmentVariable("PGDATABASE") ?? "railway",
-            Environment.GetEnvironmentVariable("PGHOST") ?? "postgres.railway.internal",
-            int.Parse(Environment.GetEnvironmentVariable("PGPORT") ?? "5432")
-        );
-    }
-
-    private static string ParseDatabaseUrl(string databaseUrl)
-    {
-        var uri = new Uri(databaseUrl);
-        var userInfo = uri.UserInfo.Split(':');
-        var builder = new NpgsqlConnectionStringBuilder
-        {
-            Host = uri.Host,
-            Port = uri.Port,
-            Username = userInfo[0],
-            Password = userInfo[1],
-            Database = uri.LocalPath.TrimStart('/'),
-            SslMode = SslMode.Require,
-            TrustServerCertificate = true
-        };
-
-        return builder.ToString();
+        return BuildConnectionString(username, password, database, host, port);
     }
 
     private static string BuildConnectionString(string username, string password, string database, string host, int port)
@@ -51,6 +33,8 @@ public static class ConnectionHelper
             SslMode = SslMode.Require,
             TrustServerCertificate = true
         };
+
+        Console.WriteLine($"Connection String: {builder.ToString()}");
 
         return builder.ToString();
     }

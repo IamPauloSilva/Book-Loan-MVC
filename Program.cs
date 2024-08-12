@@ -38,7 +38,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddHostedService<DatabaseMigrationService>();
+
 
 var app = builder.Build();
 

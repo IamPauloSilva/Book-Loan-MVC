@@ -12,8 +12,12 @@ using Npgsql;
 
 
 var builder = WebApplication.CreateBuilder(args);
+// Get connection string
+var connectionString = ConnectionHelper.GetConnectionString(builder.Configuration);
 
-
+// Register DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -33,10 +37,10 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddHostedService<DatabaseMigrationService>();
+
 var app = builder.Build();
 
-var scope = app.Services.CreateScope();
-await DataHelper.ManageDataAsync(scope.ServiceProvider);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

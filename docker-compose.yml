@@ -8,7 +8,7 @@
          - "5003:80"
       environment:
          - ASPNETCORE_URLS=http://+:80
-         - ASPNETCORE_ENVIRONMENT=Production
+         - ASPNETCORE_ENVIRONMENT=Development
          - ConnectionsStrings__postgres=Host=postgres.railway.internal;Port=5432;Username=postgres;Password=CZhCwJHsnwQxgSXqXsWKjiVXGxIOrMzJ;Database=railway;Trust Server Certificate=True
       depends_on:
           - postgres.railway.internal
@@ -25,6 +25,7 @@
         ENV PGPASSWORD: dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA
         ENV PGDATABASE: railway
         ENV PGDATA : /var/lib/postgresql/data/pgdata
+        ENV PORT : 8080
 
         
       ports:

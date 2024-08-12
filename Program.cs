@@ -58,8 +58,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-
-//app.UseHttpsRedirection();
+app.UseHsts();
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

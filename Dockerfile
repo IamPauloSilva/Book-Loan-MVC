@@ -1,28 +1,25 @@
-# Etapa 1: Construção
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
+WORKDIR /app
+EXPOSE 8080
+
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-EXPOSE 8080
-ENV PGHOST=viaduct.proxy.rlwy.net
-ENV PGPORT=20177
-ENV PGUSER=postgres
-ENV PGPASSWORD=dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA
-ENV PGDATABASE=railway
-
-# Copiar o arquivo .csproj e restaurar as dependências
 COPY ["BookLoanApp.csproj", "."]
-RUN dotnet restore "BookLoanApp.csproj"
-
-# Copiar o restante dos arquivos e construir o projeto
+RUN dotnet restore "./BookLoanApp.csproj"
 COPY . .
-RUN dotnet build "BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/."
+RUN dotnet build "./BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Etapa 2: Publicação
 FROM build AS publish
-RUN dotnet publish "BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Etapa 3: Imagem Final
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "BookLoanApp.dll"]

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookLoanApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240812041705_dbCreation")]
+    [Migration("20240812234354_dbCreation")]
     partial class dbCreation
     {
         /// <inheritdoc />

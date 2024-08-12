@@ -19,4 +19,4 @@ RUN dotnet publish "BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BookLoanApp.dll"]tps.dll"]
+ENTRYPOINT ["dotnet", "BookLoanApp.dll"]

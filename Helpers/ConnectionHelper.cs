@@ -5,42 +5,40 @@ public static class ConnectionHelper
 {
     public static string GetConnectionString(IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        // Para usar a string de conexão explícita, defina-a diretamente aqui
         var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-        if (string.IsNullOrEmpty(databaseUrl))
+        // Verifica se a variável de ambiente DATABASE_URL está configurada corretamente
+        if (!string.IsNullOrEmpty(databaseUrl))
         {
-            // If DATABASE_URL is not set, fallback to the default connection string
-            return connectionString;
+            // Utilize a string de conexão fornecida pela variável de ambiente
+            return databaseUrl;
         }
 
-        return BuildConnectionString(databaseUrl);
+        // Se DATABASE_URL não estiver definida, use uma string de conexão padrão
+        // (apenas para desenvolvimento local ou fallback)
+        return BuildConnectionString(
+            "postgres", // Usuário
+            "dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA", // Senha
+            "railway", // Banco de dados
+            "postgres.railway.internal", // Host
+            5432 // Porta
+        );
     }
 
-    private static string BuildConnectionString(string databaseUrl)
+    // Método opcional para construir uma string de conexão a partir de parâmetros explícitos
+    private static string BuildConnectionString(string username, string password, string database, string host, int port)
     {
-        var databaseUri = new Uri(databaseUrl);
-        var userInfo = databaseUri.UserInfo.Split(':');
-
-        // Ensure that userInfo has both username and password
-        if (userInfo.Length != 2)
-        {
-            throw new ArgumentException("DATABASE_URL is not in the expected format.");
-        }
-
         var builder = new NpgsqlConnectionStringBuilder
         {
-            Host = databaseUri.Host,
-            Port = databaseUri.Port,
-            Username = userInfo[0],
-            Password = userInfo[1],
-            Database = databaseUri.LocalPath.TrimStart('/'),
+            Host = host,
+            Port = port,
+            Username = username,
+            Password = password,
+            Database = database,
             SslMode = SslMode.Require,
-            TrustServerCertificate = true
+            TrustServerCertificate = true // Ajuste conforme necessário para sua configuração de produção
         };
-
-        // Optional: Log the connection string for debugging (avoid in production)
-        Console.WriteLine($"Connection String: {builder.ToString()}");
 
         return builder.ToString();
     }

@@ -13,6 +13,12 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Obter a string de conexão
+var connectionString = ConnectionHelper.GetConnectionString(builder.Configuration);
+
+// Configurar o DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -34,6 +40,7 @@ builder.Services.AddSession(options =>
 });
 
 var app = builder.Build();
+
 var scope = app.Services.CreateScope();
 await DataHelper.ManageDataAsync(scope.ServiceProvider);
 

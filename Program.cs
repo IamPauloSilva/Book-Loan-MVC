@@ -12,13 +12,11 @@ using Npgsql;
 
 
 var builder = WebApplication.CreateBuilder(args);
-// Obtenha a string de conexão explícita
-var connectionString = ConnectionHelper.GetConnectionString(builder.Configuration);
 
-
-// Configure o contexto do banco de dados
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

@@ -2,6 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+EXPOSE 8080
 ENV PGHOST=viaduct.proxy.rlwy.net
 ENV PGPORT=20177
 ENV PGUSER=postgres

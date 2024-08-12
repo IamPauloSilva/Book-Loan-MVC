@@ -1,0 +1,37 @@
+﻿services:
+    webapi:
+      build:  
+         context: .
+         dockerfile: Dockerfile
+      image: BookLoanApp
+      ports:
+         - "5003:80"
+      environment:
+         - ASPNETCORE_URLS=http://+:80
+         - ASPNETCORE_ENVIRONMENT=Production
+         - ConnectionsStrings__postgres=Host=postgres.railway.internal;Port=5432;Username=postgres;Password=CZhCwJHsnwQxgSXqXsWKjiVXGxIOrMzJ;Database=railway;Trust Server Certificate=True
+      depends_on:
+          - postgres.railway.internal
+
+    postgreserver:
+      image: postgres:latest
+      environment:
+        POSTGRES_DB: railway
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: CZhCwJHsnwQxgSXqXsWKjiVXGxIOrMzJ
+        ENV PGHOST: viaduct.proxy.rlwy.net
+        ENV PGPORT: 20177
+        ENV PGUSER: postgres
+        ENV PGPASSWORD: dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA
+        ENV PGDATABASE: railway
+        ENV PGDATA : /var/lib/postgresql/data/pgdata
+
+        
+      ports:
+        - "5432:5432"
+      volumes:
+          - pgdata:/var/lib/postgresql/data/pgdata
+
+
+volumes:
+    pgdata:

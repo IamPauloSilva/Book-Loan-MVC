@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Configurar o DbContext usando a string de conexão
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql("Host=postgres.railway.internal;Port=5432;Username=postgres;Password=CZhCwJHsnwQxgSXqXsWKjiVXGxIOrMzJ;Database=railway;SslMode=Require;Trust Server Certificate=True");
+    options.UseNpgsql(builder.Configuration.GetConnectionString("postgres"));
 });
 
 
@@ -59,7 +59,7 @@ if (!app.Environment.IsDevelopment())
 
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

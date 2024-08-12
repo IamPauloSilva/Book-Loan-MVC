@@ -6,16 +6,37 @@ public static class ConnectionHelper
     public static string GetConnectionString(IConfiguration configuration)
     {
         // Obter variáveis de ambiente diretamente
-        var username = Environment.GetEnvironmentVariable("PGUSER") ?? "postgres";
-        var password = Environment.GetEnvironmentVariable("PGPASSWORD") ?? "password";
-        var database = Environment.GetEnvironmentVariable("PGDATABASE") ?? "database";
-        var host = Environment.GetEnvironmentVariable("PGHOST") ?? "localhost";
-        var portString = Environment.GetEnvironmentVariable("PGPORT") ?? "5432";
+        var username = Environment.GetEnvironmentVariable("PGUSER");
+        var password = Environment.GetEnvironmentVariable("PGPASSWORD");
+        var database = Environment.GetEnvironmentVariable("PGDATABASE");
+        var host = Environment.GetEnvironmentVariable("PGHOST");
+        var portString = Environment.GetEnvironmentVariable("PGPORT");
 
-        if (!int.TryParse(portString, out var port))
+        // Validar variáveis de ambiente
+        if (string.IsNullOrWhiteSpace(username) ||
+            string.IsNullOrWhiteSpace(password) ||
+            string.IsNullOrWhiteSpace(database) ||
+            string.IsNullOrWhiteSpace(host))
+        {
+            Console.WriteLine("One or more environment variables are missing.");
+            Console.WriteLine($"PGUSER: {username}");
+            Console.WriteLine($"PGPASSWORD: {(string.IsNullOrWhiteSpace(password) ? "Not Set" : "Set")}");
+            Console.WriteLine($"PGDATABASE: {database}");
+            Console.WriteLine($"PGHOST: {host}");
+            Console.WriteLine($"PGPORT: {portString}");
+        }
+
+        // Definir valores padrão se as variáveis de ambiente não estiverem definidas
+        username = username ?? "postgres";
+        password = password ?? "password";
+        database = database ?? "database";
+        host = host ?? "localhost";
+        int port = 5432;
+
+        if (!string.IsNullOrWhiteSpace(portString) && !int.TryParse(portString, out port))
         {
             Console.WriteLine($"Port '{portString}' is not a valid integer.");
-            port = 5432; // Default port
+            port = 5432; // Valor padrão
         }
 
         return BuildConnectionString(username, password, database, host, port);

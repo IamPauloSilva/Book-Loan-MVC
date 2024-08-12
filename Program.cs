@@ -1,5 +1,5 @@
 using BookLoanApp.Data;
-using BookLoanApp.Helpers;
+
 using BookLoanApp.Services.Authentication;
 using BookLoanApp.Services.BookService;
 using BookLoanApp.Services.HomeService;
@@ -13,9 +13,6 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = ConnectionHelper.GetConnectionString(builder.Configuration);
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

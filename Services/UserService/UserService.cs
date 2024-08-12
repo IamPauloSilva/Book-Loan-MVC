@@ -159,10 +159,9 @@ namespace BookLoanApp.Services.UserService
                     Turno = userCreationDto.Turno,
                     HashPass = passwordHash,
                     SaltPass = passwordSalt,
-                    
-                    
                 };
-                var adress = new AdressModel
+
+                var address = new AdressModel
                 {
                     StreetAdress = userCreationDto.StreetAdress,
                     DoorNumber = userCreationDto.DoorNumber,
@@ -173,7 +172,7 @@ namespace BookLoanApp.Services.UserService
                     User = user
                 };
 
-                user.Adress = adress;
+                user.Adress = address;
 
                 _dbContext.Add(user);
                 await _dbContext.SaveChangesAsync();
@@ -182,7 +181,10 @@ namespace BookLoanApp.Services.UserService
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                // Log the exception details
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                throw; // Optionally, rethrow to maintain original stack trace
             }
         }
     }

@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Configurar o DbContext usando a string de conexão
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql("Host=postgres.railway.internal;Port=5432;Username=postgres;Password=dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA;Database=railway;SslMode=Require;Trust Server Certificate=True");
+    options.UseNpgsql("Host=viaduct.proxy.rlwy.net;Port=20177;Username=postgres;Password=dITRyJVqrrSIvtQNHqHtlzFvhIzMlFCA;Database=railway;SslMode=Require;Trust Server Certificate=True");
 });
 
 

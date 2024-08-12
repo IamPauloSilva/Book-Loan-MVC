@@ -1,17 +1,22 @@
+# Etapa 1: Construção
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+# Copiar o arquivo .csproj e restaurar as dependências
 COPY ["BookLoanApp.csproj", "."]
-RUN dotnet restore "./BookLoanApp.csproj"
+RUN dotnet restore "BookLoanApp.csproj"
+
+# Copiar o restante dos arquivos e construir o projeto
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+# Etapa 2: Publicação
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "BookLoanApp.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+# Etapa 3: Imagem Final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BookLoanApp.dll"]
+ENTRYPOINT ["dotnet", "BookLoanApp.dll"]tps.dll"]

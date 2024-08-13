@@ -7,17 +7,20 @@ using BookLoanApp.Services.LoanService;
 using BookLoanApp.Services.ReportService;
 using BookLoanApp.Services.SessionService;
 using BookLoanApp.Services.UserService;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar o DbContext usando a string de conexão
+// Register DbContext with MySQL
+var connectionString = builder.Configuration.GetConnectionString("mysql")
+    ?? throw new InvalidOperationException("Connection string 'mysql' not found.");
+
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 38));
 builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("postgres"));
-});
+    options.UseMySql(connectionString, serverVersion));
 
 
 // Add services to the container.
@@ -45,6 +48,26 @@ var app = builder.Build();
 
 if (builder.Environment.IsProduction() && builder.Configuration.GetValue<int?>("PORT") is not null)
     builder.WebHost.UseUrls($"http://*:{builder.Configuration.GetValue<int>("PORT")}");
+
+
+// Migração automática do banco de dados
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        context.Database.Migrate(); // Aplica as migrações pendentes
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+        // Em um cenário de produção, você pode querer encerrar a aplicação aqui
+        // ou lançar a exceção para garantir que erros críticos não passem despercebidos.
+        throw;
+    }
+}
 
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using BookLoanApp.Data;
 using BookLoanApp.Dto.Book;
 using BookLoanApp.Models;

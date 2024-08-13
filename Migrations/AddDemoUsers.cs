@@ -9,11 +9,11 @@ namespace BookLoanApp.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Inserir dados de demonstração
+            
             var adminPassword = "AdminPassword123!";
             var clientPassword = "ClientPassword123!";
 
-            // Utilizar o método de hashing e salting do seu serviço de autenticação
+            
             var (adminHash, adminSalt) = PasswordUtils.CreateHashAndSalt(adminPassword);
             var (clientHash, clientSalt) = PasswordUtils.CreateHashAndSalt(clientPassword);
 

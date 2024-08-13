@@ -145,11 +145,11 @@ namespace BookLoanApp.Migrations
                 column: "UserId");
 
 
-            // Inserir dados de demonstração
+            
             var adminPassword = "AdminPassword123!";
             var clientPassword = "ClientPassword123!";
 
-            // Utilizar o método de hashing e salting do seu serviço de autenticação
+            
             var (adminHash, adminSalt) = PasswordUtils.CreateHashAndSalt(adminPassword);
             var (clientHash, clientSalt) = PasswordUtils.CreateHashAndSalt(clientPassword);
 

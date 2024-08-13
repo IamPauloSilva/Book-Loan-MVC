@@ -57,18 +57,21 @@ namespace BookLoanApp.Services.BookService
             try
             {
                 var codigoUnico = Guid.NewGuid().ToString();
-                var nomeCaminhoImagem = foto.FileName.Replace(" ", "").ToLower() + codigoUnico + bookCreationDto.ISBN + ".png";
+                var nomeCaminhoImagem = $"{foto.FileName.Replace(" ", "").ToLower()}_{codigoUnico}_{bookCreationDto.ISBN}.png";
 
-                string caminhoParaSalvarImagens = "\\src\\" +  _serverpath + "\\Images\\";
+                // Construct the full path for saving the image
+                string caminhoParaSalvarImagens = Path.Combine(_serverpath, "Images", nomeCaminhoImagem);
 
-                if (!Directory.Exists(caminhoParaSalvarImagens))
+                // Ensure the directory exists
+                if (!Directory.Exists(Path.Combine(_serverpath, "Images")))
                 {
-                    Directory.CreateDirectory(caminhoParaSalvarImagens);
+                    Directory.CreateDirectory(Path.Combine(_serverpath, "Images"));
                 }
 
-                using (var stream = System.IO.File.Create(caminhoParaSalvarImagens + nomeCaminhoImagem))
+                // Save the file
+                using (var stream = new FileStream(caminhoParaSalvarImagens, FileMode.Create))
                 {
-                    foto.CopyToAsync(stream).Wait();
+                    await foto.CopyToAsync(stream);
                 }
 
                 var livro = _mapper.Map<BooksModel>(bookCreationDto);

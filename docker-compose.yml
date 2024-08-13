@@ -1,15 +1,22 @@
-﻿services:
-    webapi:
-      build:  
-         context: .
-         dockerfile: Dockerfile
-      image: BookLoanApp
-      ports:
-         - "5003:80"
-      environment:
-         - ASPNETCORE_URLS=http://+:80
-         - ASPNETCORE_ENVIRONMENT=Development
-        
-      depends_on:
-          - mysql.railway.internal
+version: '3.8'
 
+services:
+  webapi:
+    build:  
+      context: .
+      dockerfile: Dockerfile
+    image: BookLoanApp
+    ports:
+      - "5003:80"
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./Images:/app/Images  # Mount host directory to container directory
+    depends_on:
+      - mysql.railway.internal
+
+  mysql.railway.internal:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: example

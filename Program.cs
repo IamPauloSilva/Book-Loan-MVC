@@ -10,12 +10,17 @@ using BookLoanApp.Services.UserService;
 using DocumentFormat.OpenXml.InkML;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-
+using DotNetEnv;
+using System.Collections;
 
 var builder = WebApplication.CreateBuilder(args);
-
+Env.Load();
+var envVariables = Environment.GetEnvironmentVariables();
+builder.Configuration.AddInMemoryCollection(envVariables.Cast<DictionaryEntry>()
+                                      .ToDictionary(d => d.Key.ToString(),
+                                                    d => d.Value.ToString()));
 // Register DbContext with MySQL
-var connectionString = builder.Configuration.GetConnectionString("mysql")
+var connectionString = builder.Configuration["SQL_CONNECTION_STRING"]
     ?? throw new InvalidOperationException("Connection string 'mysql' not found.");
 
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 38));
@@ -45,9 +50,9 @@ builder.Services.AddSession(options =>
 
 
 var app = builder.Build();
-
-if (builder.Environment.IsProduction() && builder.Configuration.GetValue<int?>("PORT") is not null)
-    builder.WebHost.UseUrls($"http://*:{builder.Configuration.GetValue<int>("PORT")}");
+string port = builder.Configuration["PORT"];
+if (builder.Environment.IsProduction() && port is not null)
+    builder.WebHost.UseUrls($"http://*:{builder.Configuration["PORT"]}");
 
 
 // Migração automática do banco de dados

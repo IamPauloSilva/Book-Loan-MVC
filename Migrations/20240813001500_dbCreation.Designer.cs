@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookLoanApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240812234354_dbCreation")]
+    [Migration("20240813001500_dbCreation")]
     partial class dbCreation
     {
         /// <inheritdoc />
@@ -27,11 +27,11 @@ namespace BookLoanApp.Migrations
 
             modelBuilder.Entity("BookLoanApp.Models.AdressModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -41,7 +41,8 @@ namespace BookLoanApp.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("DoorNumber")
+                    b.Property<int?>("DoorNumber")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("State")
@@ -52,7 +53,7 @@ namespace BookLoanApp.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Zipcode")
@@ -69,11 +70,11 @@ namespace BookLoanApp.Migrations
 
             modelBuilder.Entity("BookLoanApp.Models.BooksModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -98,13 +99,15 @@ namespace BookLoanApp.Migrations
                     b.Property<DateTime>("LastAlterationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("PublicationYear")
+                    b.Property<int?>("PublicationYear")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("StockAmount")
+                    b.Property<int?>("StockAmount")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
@@ -118,25 +121,25 @@ namespace BookLoanApp.Migrations
 
             modelBuilder.Entity("BookLoanApp.Models.LoanModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
 
-                    b.Property<int>("BookId")
+                    b.Property<int?>("BookId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("BooksId")
+                    b.Property<int?>("BooksId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("DeliverDate")
+                    b.Property<DateTime>("DeliverDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("LoanDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -150,11 +153,11 @@ namespace BookLoanApp.Migrations
 
             modelBuilder.Entity("BookLoanApp.Models.UserModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -200,9 +203,7 @@ namespace BookLoanApp.Migrations
                 {
                     b.HasOne("BookLoanApp.Models.UserModel", "User")
                         .WithOne("Adress")
-                        .HasForeignKey("BookLoanApp.Models.AdressModel", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BookLoanApp.Models.AdressModel", "UserId");
 
                     b.Navigation("User");
                 });
@@ -211,15 +212,11 @@ namespace BookLoanApp.Migrations
                 {
                     b.HasOne("BookLoanApp.Models.BooksModel", "Books")
                         .WithMany("Loans")
-                        .HasForeignKey("BooksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BooksId");
 
                     b.HasOne("BookLoanApp.Models.UserModel", "User")
                         .WithMany("LoanList")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Books");
 

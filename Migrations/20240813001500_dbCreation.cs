@@ -68,7 +68,7 @@ namespace BookLoanApp.Migrations
                     Country = table.Column<string>(type: "text", nullable: false),
                     DoorNumber = table.Column<int>(type: "integer", nullable: false),
                     Zipcode = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,8 +77,7 @@ namespace BookLoanApp.Migrations
                         name: "FK_Adresses_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -87,11 +86,11 @@ namespace BookLoanApp.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    BookId = table.Column<int>(type: "integer", nullable: false),
-                    BooksId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
+                    BookId = table.Column<int>(type: "integer", nullable: true),
+                    BooksId = table.Column<int>(type: "integer", nullable: true),
                     LoanDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DeliverDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeliverDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,14 +99,12 @@ namespace BookLoanApp.Migrations
                         name: "FK_Loans_Books_BooksId",
                         column: x => x.BooksId,
                         principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Loans_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

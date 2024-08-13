@@ -6,24 +6,24 @@ namespace BookLoanApp.Models
     public class UserModel
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required]
-        public string FullName { get; set; } = string.Empty;
+        public string? FullName { get; set; } = string.Empty;
         [Required]
-        public string UserName { get; set; } = string.Empty;
+        public string? UserName { get; set; } = string.Empty;
         [Required]
-        public string Email { get; set; } = string.Empty;
+        public string? Email { get; set; } = string.Empty;
         [Required]
         public bool Situation { get; set; } = true;
         [Required]
-        public byte[] HashPass { get; set; }
+        public byte[]? HashPass { get; set; }
         [Required]
-        public byte[] SaltPass { get; set; }
+        public byte[]? SaltPass { get; set; }
         public DateTime RegisterDate { get; set; } = DateTime.Now;
         public DateTime LastAlterationDate { get; set; } = DateTime.Now;
 
-        public List<LoanModel> LoanList { get; set; }
+        public List<LoanModel>? LoanList { get; set; }
 
         [Required]
         public ProfilesEnum Profile { get; set; }
@@ -31,7 +31,7 @@ namespace BookLoanApp.Models
         public TurnoEnum Turno { get; set; }
 
         [Required]
-        public AdressModel Adress { get; set; } 
+        public AdressModel? Adress { get; set; } 
     }
 
         

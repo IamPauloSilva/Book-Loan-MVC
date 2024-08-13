@@ -41,7 +41,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model.Count() > 0)
+            @if (Model.Any())
             {
                 @foreach (var user in Model)
                 {
@@ -58,9 +58,18 @@
                                 <img src="~/img/Inativo.png" style="width: 25px; height: 25px" />
                             </td>
                         }
-                        <th style ="text-align: center; vertical-align: middle;" scope="row"><i class="bi bi-people"></i> @user.UserName</th>
-                        <td style ="text-align: center; vertical-align: middle;">@user.FullName</td>
-                        <td style="text-align: center; vertical-align: middle;">@user.Adress.State</td>
+                        <th style="text-align: center; vertical-align: middle;" scope="row"><i class="bi bi-people"></i> @user.UserName</th>
+                        <td style="text-align: center; vertical-align: middle;">@user.FullName</td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            @if (user.Adress != null)
+                            {
+                                @user.Adress.State
+                            }
+                            else
+                            {
+                            <td style="text-align: center; vertical-align: middle;">N/A</td>
+                            }
+                        </td>
                         <td style="text-align: center; vertical-align: middle;"><i class="bi bi-envelope-at"></i> @user.Email</td>
                         <td style="text-align: center; vertical-align: middle;"><i class="bi bi-calendar"></i> @user.RegisterDate.ToString("dd/MM/yyyy")</td>
                         <td>
@@ -70,9 +79,13 @@
                     </tr>
                 }
             }
-
-
-
+            else
+            {
+                <tr>
+                    <td colspan="7" style="text-align: center;">No users found</td>
+                </tr>
+            }
         </tbody>
+
     </table>
 </div>

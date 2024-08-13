@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookLoanApp.Migrations
 {
-    /// <inheritdoc />
     public partial class dbCreations : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
@@ -144,12 +142,10 @@ namespace BookLoanApp.Migrations
                 table: "Loans",
                 column: "UserId");
 
-
-            
+            // Inserir Admin e Client
             var adminPassword = "AdminPassword123!";
             var clientPassword = "ClientPassword123!";
 
-            
             var (adminHash, adminSalt) = PasswordUtils.CreateHashAndSalt(adminPassword);
             var (clientHash, clientSalt) = PasswordUtils.CreateHashAndSalt(clientPassword);
 
@@ -168,9 +164,22 @@ namespace BookLoanApp.Migrations
                 {
                     "Client User", "client", "client@example.com", true, clientHash, clientSalt, DateTime.Now, DateTime.Now, 0, 0
                 });
+
+            // Adicionar endereço aleatório para Admin
+            migrationBuilder.Sql(@"
+                INSERT INTO Adresses (StreetAdress, City, State, Country, DoorNumber, Zipcode, UserId)
+                VALUES 
+                    ('123 Admin St', 'Admin City', 'Admin State', 'Admin Country', 123, '12345', (SELECT Id FROM Users WHERE UserName = 'admin'))
+            ");
+
+            // Adicionar endereço aleatório para Client
+            migrationBuilder.Sql(@"
+                INSERT INTO Adresses (StreetAdress, City, State, Country, DoorNumber, Zipcode, UserId)
+                VALUES 
+                    ('456 Client Ave', 'Client Town', 'Client State', 'Client Nation', 456, '67890', (SELECT Id FROM Users WHERE UserName = 'client'))
+            ");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -185,7 +194,7 @@ namespace BookLoanApp.Migrations
             migrationBuilder.DropTable(
                 name: "Users");
 
-
+            // Remover dados inseridos
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Email",

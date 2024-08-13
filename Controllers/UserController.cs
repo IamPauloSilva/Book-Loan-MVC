@@ -50,29 +50,29 @@ namespace BookLoanApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!await _userInterface.CheckIfUserAlreadyExists(userCreationDto))
+                var userCheckResult = await _userInterface.CheckIfUserAlreadyExists(userCreationDto);
+
+                if (userCheckResult.UserExists)
                 {
-                    TempData["MensagemErro"] = "User already registered!";
+                    TempData["MensagemErro"] = userCheckResult.Message;
                     return View(userCreationDto);
                 }
 
                 var user = await _userInterface.Register(userCreationDto);
-                TempData["MensagemSucesso"] = "Sucessfully registered!";
+                TempData["MensagemSucesso"] = "Successfully registered!";
 
                 if (user.Profile != ProfilesEnum.Client)
                 {
                     return RedirectToAction("Index", "Employee");
                 }
 
-                return RedirectToAction("Index", "Client" , new { Id = "0" });
-
+                return RedirectToAction("Index", "Client", new { Id = "0" });
             }
-            else 
+            else
             {
                 TempData["MensagemErro"] = "Invalid fields!";
                 return View(userCreationDto);
             }
-
         }
 
         [HttpGet]

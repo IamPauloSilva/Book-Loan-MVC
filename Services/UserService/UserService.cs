@@ -55,25 +55,38 @@ namespace BookLoanApp.Services.UserService
                 throw new Exception(ex.Message);
             }
         }
-
-        public async Task<bool> CheckIfUserAlreadyExists(UserCreationDto userCreationDto)
+        public class UserCheckResult
+        {
+            public bool UserExists { get; set; }
+            public string? Message { get; set; }
+        }
+        public async Task<UserCheckResult> CheckIfUserAlreadyExists(UserCreationDto userCreationDto)
         {
             try
             {
-                var checkUser =  _dbContext.Users.FirstOrDefault(u => u.Email == userCreationDto.Email || u.UserName == userCreationDto.UserName);
+                var checkUser = await _dbContext.Users
+                    .FirstOrDefaultAsync(u => u.Email == userCreationDto.Email);
 
-                if (checkUser == null)
+                if (checkUser != null)
                 {
-                    return true;
+                    return new UserCheckResult
+                    {
+                        UserExists = true,
+                        Message = "User already registered!"
+                    };
                 }
-                
-                return false;
-               
-            }
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
 
+                return new UserCheckResult
+                {
+                    UserExists = false,
+                    Message = string.Empty // No message if the user does not exist
+                };
+            }
+            catch (Exception ex)
+            {
+                // Log a mensagem de erro
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Rethrow the exception to maintain stack trace
             }
         }
 

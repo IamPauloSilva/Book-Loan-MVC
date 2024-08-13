@@ -52,55 +52,42 @@ namespace BookLoanApp.Services.BookService
         }
 
         
-        public async Task<BooksModel> Register(BookCreationDto bookCreationDto, IFormFile foto)
+ public async Task<BooksModel> Register(BookCreationDto bookCreationDto, IFormFile foto)
+{
+    try
+    {
+        var codigoUnico = Guid.NewGuid().ToString();
+        var nomeCaminhoImagem = $"{foto.FileName.Replace(" ", "").ToLower()}_{codigoUnico}_{bookCreationDto.ISBN}.png";
+
+        // Construct the full path for saving the image
+        string caminhoParaSalvarImagens = Path.Combine(_serverpath, "Images", nomeCaminhoImagem);
+
+        // Ensure the directory exists
+        if (!Directory.Exists(Path.Combine(_serverpath, "Images")))
         {
-            try
-            {
-                var codigoUnico = Guid.NewGuid().ToString();
-                var nomeCaminhoImagem = foto.FileName.Replace(" ", "").ToLower() + codigoUnico + bookCreationDto.ISBN + ".png";
-
-                string caminhoParaSalvarImagens = "\\src\\" +  _serverpath + "\\Images\\";
-
-                if (!Directory.Exists(caminhoParaSalvarImagens))
-                {
-                    Directory.CreateDirectory(caminhoParaSalvarImagens);
-                }
-
-                using (var stream = System.IO.File.Create(caminhoParaSalvarImagens + nomeCaminhoImagem))
-                {
-                    foto.CopyToAsync(stream).Wait();
-                }
-
-                var livro = _mapper.Map<BooksModel>(bookCreationDto);
-                livro.Cape = nomeCaminhoImagem;
-
-
-                _context.Add(livro);
-                await _context.SaveChangesAsync();
-
-                return livro;
-
-
-            }
-            catch (Exception ex) 
-            {
-                throw new Exception(ex.Message);
-            }
+            Directory.CreateDirectory(Path.Combine(_serverpath, "Images"));
         }
 
-        public async Task<BooksModel> GetBooksById(int? id)
+        // Save the file
+        using (var stream = new FileStream(caminhoParaSalvarImagens, FileMode.Create))
         {
-            try
-            {
-                var book = await _context.Books.FirstOrDefaultAsync(x => x.Id == id);
-                return book;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            await foto.CopyToAsync(stream);
         }
 
+        // Save the rest of the book data
+        var bookModel = _mapper.Map<BooksModel>(bookCreationDto);
+        bookModel.ImagePath = nomeCaminhoImagem;
+
+        _context.Books.Add(bookModel);
+        await _context.SaveChangesAsync();
+
+        return bookModel;
+    }
+    catch (Exception ex)
+    {
+        throw new Exception(ex.Message);
+    }
+}
         public async Task<BooksModel> Edit(BookEditDto bookEditDto, IFormFile foto)
         {
             try

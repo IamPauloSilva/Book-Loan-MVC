@@ -59,7 +59,7 @@ namespace BookLoanApp.Services.BookService
                 var codigoUnico = Guid.NewGuid().ToString();
                 var nomeCaminhoImagem = foto.FileName.Replace(" ", "").ToLower() + codigoUnico + bookCreationDto.ISBN + ".png";
 
-                string caminhoParaSalvarImagens = "\\app\\" + _serverpath + "\\Images\\";
+                string caminhoParaSalvarImagens = "\\src\\" + _serverpath + "\\Images\\";
 
                 if (!Directory.Exists(caminhoParaSalvarImagens))
                 {

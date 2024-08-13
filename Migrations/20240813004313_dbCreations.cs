@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookLoanApp.Migrations
 {
     /// <inheritdoc />
-    public partial class dbCreation : Migration
+    public partial class dbCreations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

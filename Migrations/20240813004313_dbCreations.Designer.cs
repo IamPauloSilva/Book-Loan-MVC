@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookLoanApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240813001500_dbCreation")]
-    partial class dbCreation
+    [Migration("20240813004313_dbCreations")]
+    partial class dbCreations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

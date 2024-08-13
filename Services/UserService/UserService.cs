@@ -60,7 +60,7 @@ namespace BookLoanApp.Services.UserService
         {
             try
             {
-                var checkUser = _dbContext.Users.FirstOrDefault(u => u.Email == userCreationDto.Email || u.UserName == userCreationDto.UserName);
+                var checkUser =  _dbContext.Users.FirstOrDefault(u => u.Email == userCreationDto.Email || u.UserName == userCreationDto.UserName);
 
                 if (checkUser == null)
                 {

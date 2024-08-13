@@ -22,7 +22,7 @@ namespace BookLoanApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(string search = null)
+        public async Task<ActionResult> Index(string? search = null)
         {
             var userSession = _sessionInterface.GetSession();
             if (userSession != null)

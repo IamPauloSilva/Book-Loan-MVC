@@ -108,7 +108,7 @@ namespace BookLoanApp.Migrations
                     BookId = table.Column<int>(type: "int", nullable: true),
                     BooksId = table.Column<int>(type: "int", nullable: true),
                     LoanDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeliverDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    DeliverDate = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {

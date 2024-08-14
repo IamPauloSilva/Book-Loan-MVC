@@ -12,6 +12,6 @@ namespace BookLoanApp.Models
         [JsonIgnore]
         public BooksModel? Books { get; set; }
         public DateTime LoanDate { get; set; } = DateTime.Now;
-        public DateTime DeliverDate { get; set; }
+        public DateTime? DeliverDate { get; set; }
     }
 }

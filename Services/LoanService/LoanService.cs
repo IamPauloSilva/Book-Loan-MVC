@@ -39,6 +39,7 @@ namespace BookLoanApp.Services.LoanService
                     //User = userSession,
                     BookId = book.Id,
                     Books = book
+                    
                 };
 
                 _appDbContext.Add(loan);
